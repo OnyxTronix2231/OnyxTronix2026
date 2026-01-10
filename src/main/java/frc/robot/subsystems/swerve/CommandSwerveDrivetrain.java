@@ -261,7 +261,7 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
             case AUTO:
                 return SystemState.AUTO;
             case TELEOP: {
-                //arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, () -> maxSpeedMulti(maxSpeed));
+                arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, ()->1);
                 double turnFieldFrame = arr[2].getAsDouble() / maxAngularRate;
                 if (Math.abs(turnFieldFrame) > 0.05) {
                     mJoystickLastTouched = Timer.getFPGATimestamp();
