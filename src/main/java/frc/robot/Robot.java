@@ -19,6 +19,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
+//    private Autonomous auto;
 
     public static Constants.RunningState currentRunningState = isSimulation() ? Constants.RunningState.SIMULATION : Constants.RunningState.ROBOT_B;
 
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
 
             }
 
+            //auto
+//            auto = new Autonomous();
         }
     }
 
@@ -71,6 +74,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         // schedule the autonomous command (example)
+//        m_autonomousCommand = auto.getSelectedCommand();
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
