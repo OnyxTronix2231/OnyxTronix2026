@@ -9,10 +9,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import frc.robot.subsystems.localization.Localization;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
+import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -29,20 +34,25 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         initializeLogger();
 
-        switch(currentRunningState) {
-            case SIMULATION ->{
+//        switch(currentRunningState) {
+//            case SIMULATION -> {
+//
+//            }
+//            case ROBOT_A -> {
+//
+//            }
+//            case ROBOT_B -> {
+//
+//            }
+//        }
 
-            }
-            case ROBOT_A -> {
+            CommandSwerveDrivetrain.init(createDrivetrain());
+            Localization.init();
 
-            }
-            case ROBOT_B -> {
-
-            }
 
             //auto
 //            auto = new Autonomous();
-        }
+
     }
 
     /**
@@ -54,6 +64,8 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void robotPeriodic() {
+        updateVisualizations();
+
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
