@@ -14,7 +14,7 @@ public class Autonomous {
         autoChooser = AutoBuilder.buildAutoChooser();
         addAllEvents();
         addAllTheAuto();
-        autoChooser.setDefaultOption("the name of the auto you want for default", new PathPlannerAuto("the name of the auto you want for default"));
+        autoChooser.setDefaultOption("Example Auto", new PathPlannerAuto("Example Auto"));
         Shuffleboard.getTab("auto").add(autoChooser);
     }
 
@@ -29,7 +29,7 @@ public class Autonomous {
     }
 
     public void addAllTheAuto() {
-        addAuto("the name of the auto you want");
+        addAuto("Example Auto");
     }
 
     public Command getSelectedCommand() {

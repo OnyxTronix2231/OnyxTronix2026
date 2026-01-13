@@ -26,7 +26,7 @@ import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
  */
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
-//    private Autonomous auto;
+    private Autonomous auto;
 
     public static Constants.RunningState currentRunningState = isSimulation() ? Constants.RunningState.SIMULATION : Constants.RunningState.ROBOT_B;
 
@@ -51,7 +51,8 @@ public class Robot extends LoggedRobot {
 
 
             //auto
-//            auto = new Autonomous();
+            CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.AUTO);
+            auto = new Autonomous();
 
     }
 
@@ -88,7 +89,7 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
 
         // schedule the autonomous command (example)
-//        m_autonomousCommand = auto.getSelectedCommand();
+        m_autonomousCommand = auto.getSelectedCommand();
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
