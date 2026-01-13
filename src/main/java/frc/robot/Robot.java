@@ -5,12 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import frc.robot.subsystems.arc.Arc;
+import frc.robot.subsystems.arc.ArcIOSimulation;
+import frc.robot.subsystems.arc.ArcShuffleboard;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.visualization.ArcVisualization;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -34,23 +36,25 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         initializeLogger();
 
-//        switch(currentRunningState) {
-//            case SIMULATION -> {
-//
-//            }
-//            case ROBOT_A -> {
-//
-//            }
-//            case ROBOT_B -> {
-//
-//            }
-//        }
+        switch (currentRunningState) {
+            case SIMULATION -> {
+                Arc arc = new Arc(new ArcIOSimulation());
+                new ArcShuffleboard();
+                new ArcVisualization();
+            }
+            case ROBOT_A -> {
 
-            CommandSwerveDrivetrain.init(createDrivetrain());
-            Localization.init();
+            }
+            case ROBOT_B -> {
+
+            }
+        }
+
+        CommandSwerveDrivetrain.init(createDrivetrain());
+        Localization.init();
 
 
-            //auto
+        //auto
 //            auto = new Autonomous();
 
     }
