@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.turret.TurretIOSimulation;
+import frc.robot.visualization.TurretVisualization;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -34,17 +37,17 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         initializeLogger();
 
-//        switch(currentRunningState) {
-//            case SIMULATION -> {
-//
-//            }
-//            case ROBOT_A -> {
-//
-//            }
-//            case ROBOT_B -> {
-//
-//            }
-//        }
+        switch(currentRunningState) {
+            case SIMULATION -> {
+                Turret.init(new TurretIOSimulation());
+                new TurretVisualization();
+            }
+            case ROBOT_A -> {
+            }
+            case ROBOT_B -> {
+                break;
+            }
+        }
 
             CommandSwerveDrivetrain.init(createDrivetrain());
             Localization.init();
