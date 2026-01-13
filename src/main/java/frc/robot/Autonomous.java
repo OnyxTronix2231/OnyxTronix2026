@@ -30,6 +30,7 @@ public class Autonomous {
 
     public void addAllTheAuto() {
         addAuto("Example Auto");
+        addAuto("msc");
     }
 
     public Command getSelectedCommand() {
