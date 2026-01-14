@@ -45,8 +45,8 @@ public class TurretConstants {
 
 
     //SIMULATION
-    public static final double SIMULATION_TURRET_CRUISE_VELOCITY = 3;
-    public static final double SIMULATION_TURRET_ACCELERATION = 5.5;
+    public static final double SIMULATION_TURRET_CRUISE_VELOCITY = 8;
+    public static final double SIMULATION_TURRET_ACCELERATION = 10;
     public static final double SIMULATION_TURRET_JERK = 0;
 
     public static final double SIMULATION_TURRET_KP = 11;
