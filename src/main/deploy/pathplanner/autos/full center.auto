@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "prior 4 1"
+            "pathName": "full center 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 4 2"
+            "pathName": "full center 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 4 3"
+            "pathName": "full center 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 4 4"
+            "pathName": "full center 4"
           }
         }
       ]

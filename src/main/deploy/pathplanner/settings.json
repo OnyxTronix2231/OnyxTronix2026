@@ -3,13 +3,13 @@
   "robotLength": 0.901,
   "holonomicMode": true,
   "pathFolders": [
-    "prior 5",
     "depot shoot climb",
+    "full center",
+    "left tranch",
     "middle shoot climb",
-    "prior 1",
-    "prior 2",
-    "prior 3",
-    "prior 4"
+    "left tranch with depot",
+    "right tranch",
+    "right tranch with feeder"
   ],
   "autoFolders": [],
   "defaultMaxVel": 5.0,

@@ -64,7 +64,7 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "prior 4",
+  "folder": "full center",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "prior 5 1"
+            "pathName": "left tranch with depot 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 5 2"
+            "pathName": "left tranch with depot 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 5 3"
+            "pathName": "left tranch with depot 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 5 4"
+            "pathName": "left tranch with depot 4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 5 5"
+            "pathName": "left tranch with depot 5"
           }
         }
       ]

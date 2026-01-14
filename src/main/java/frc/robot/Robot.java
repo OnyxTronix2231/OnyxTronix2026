@@ -51,7 +51,6 @@ public class Robot extends LoggedRobot {
 
 
             //auto
-            CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.AUTO);
             auto = new Autonomous();
 
     }
@@ -89,6 +88,7 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
 
         // schedule the autonomous command (example)
+        CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.AUTO);
         m_autonomousCommand = auto.getSelectedCommand();
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
@@ -108,6 +108,8 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
+        CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP);
+
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }

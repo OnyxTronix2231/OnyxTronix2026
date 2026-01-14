@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "prior 1 1"
+            "pathName": "right tranch 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 1 2"
+            "pathName": "right tranch 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "prior 1 3"
+            "pathName": "right tranch 3"
           }
         }
       ]
