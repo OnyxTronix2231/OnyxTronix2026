@@ -13,8 +13,8 @@ public class OnyxMotorInputs {
 
     private final int motorID;
     private final StatusSignal<Temperature> motorTemperatureSignal;
-    private final StatusSignal<AngularVelocity> motorAngularVelocityRadPerSecSignal;
-    private final StatusSignal<AngularAcceleration> motorAngularAccelerationRadPerSecSquaredSignal;
+    private final StatusSignal<AngularVelocity> motorAngularVelocityRotPerSecSignal;
+    private final StatusSignal<AngularAcceleration> motorAngularAccelerationRotPerSecSquaredSignal;
     private final StatusSignal<Current> motorStatorCurrentAmpsSignal;
     private final StatusSignal<Voltage> motorAppliedVoltsSignal;
     private final StatusSignal<Current> motorSupplyCurrentAmpsSignal;
@@ -25,8 +25,8 @@ public class OnyxMotorInputs {
     private final String logBase;
 
     private double motorTemperature;
-    private double motorAngularVelocityRadPerSec;
-    private double motorAngularAccelerationRadPerSecSquared;
+    private double motorAngularVelocityRotPerSec;
+    private double motorAngularAccelerationRotPerSecSquared;
     private double motorStatorCurrentAmps;
     private double motorAppliedVolts;
     private double motorSupplyCurrentAmps;
@@ -36,8 +36,8 @@ public class OnyxMotorInputs {
         this.gearingFunction = gearingFunction;
         motorID = motor.getDeviceID();
         motorTemperatureSignal = motor.getDeviceTemp();
-        motorAngularVelocityRadPerSecSignal = motor.getVelocity();
-        motorAngularAccelerationRadPerSecSquaredSignal = motor.getAcceleration();
+        motorAngularVelocityRotPerSecSignal = motor.getVelocity();
+        motorAngularAccelerationRotPerSecSquaredSignal = motor.getAcceleration();
         motorStatorCurrentAmpsSignal = motor.getStatorCurrent();
         motorAppliedVoltsSignal = motor.getMotorVoltage();
         motorSupplyCurrentAmpsSignal = motor.getSupplyCurrent();
@@ -47,8 +47,8 @@ public class OnyxMotorInputs {
         this.motorName = motorName;
 
         motorTemperature = motorTemperatureSignal.getValueAsDouble();
-        motorAngularVelocityRadPerSec = motorAngularVelocityRadPerSecSignal.getValueAsDouble();
-        motorAngularAccelerationRadPerSecSquared = motorAngularAccelerationRadPerSecSquaredSignal.getValueAsDouble();
+        motorAngularVelocityRotPerSec = motorAngularVelocityRotPerSecSignal.getValueAsDouble();
+        motorAngularAccelerationRotPerSecSquared = motorAngularAccelerationRotPerSecSquaredSignal.getValueAsDouble();
         motorStatorCurrentAmps = motorStatorCurrentAmpsSignal.getValueAsDouble();
         motorAppliedVolts = motorAppliedVoltsSignal.getValueAsDouble();
         motorSupplyCurrentAmps = motorSupplyCurrentAmpsSignal.getValueAsDouble();
@@ -62,16 +62,16 @@ public class OnyxMotorInputs {
     public OnyxMotorInputs() {
         motorID = 0;
         motorTemperature = 0;
-        motorAngularVelocityRadPerSec = 0;
-        motorAngularAccelerationRadPerSecSquared = 0;
+        motorAngularVelocityRotPerSec = 0;
+        motorAngularAccelerationRotPerSecSquared = 0;
         motorStatorCurrentAmps = 0;
         motorAppliedVolts = 0;
         motorSupplyCurrentAmps = 0;
         motorRawValue = 0;
 
         motorTemperatureSignal = null;
-        motorAngularVelocityRadPerSecSignal = null;
-        motorAngularAccelerationRadPerSecSquaredSignal = null;
+        motorAngularVelocityRotPerSecSignal = null;
+        motorAngularAccelerationRotPerSecSquaredSignal = null;
         motorStatorCurrentAmpsSignal = null;
         motorAppliedVoltsSignal = null;
         motorSupplyCurrentAmpsSignal = null;
@@ -84,16 +84,16 @@ public class OnyxMotorInputs {
     public void updateInputs() {
         BaseStatusSignal.refreshAll(
                 motorTemperatureSignal,
-                motorAngularVelocityRadPerSecSignal,
-                motorAngularAccelerationRadPerSecSquaredSignal,
+                motorAngularVelocityRotPerSecSignal,
+                motorAngularAccelerationRotPerSecSquaredSignal,
                 motorStatorCurrentAmpsSignal,
                 motorAppliedVoltsSignal,
                 motorSupplyCurrentAmpsSignal,
                 motorRawValueSignal
         );
         motorTemperature = motorTemperatureSignal.getValueAsDouble();
-        motorAngularVelocityRadPerSec = motorAngularVelocityRadPerSecSignal.getValueAsDouble();
-        motorAngularAccelerationRadPerSecSquared = motorAngularAccelerationRadPerSecSquaredSignal.getValueAsDouble();
+        motorAngularVelocityRotPerSec = motorAngularVelocityRotPerSecSignal.getValueAsDouble();
+        motorAngularAccelerationRotPerSecSquared = motorAngularAccelerationRotPerSecSquaredSignal.getValueAsDouble();
         motorStatorCurrentAmps = motorStatorCurrentAmpsSignal.getValueAsDouble();
         motorAppliedVolts = motorAppliedVoltsSignal.getValueAsDouble();
         motorSupplyCurrentAmps = motorSupplyCurrentAmpsSignal.getValueAsDouble();
@@ -107,8 +107,8 @@ public class OnyxMotorInputs {
         Logger.recordOutput(logBase + motorName + "/AppliedVolts", motorAppliedVoltsSignal.getValueAsDouble());
         Logger.recordOutput(logBase + motorName + "/SupplyCurrentAmps", motorSupplyCurrentAmpsSignal.getValueAsDouble());
         Logger.recordOutput(logBase + motorName + "/StatorCurrentAmps", motorStatorCurrentAmpsSignal.getValueAsDouble());
-        Logger.recordOutput(logBase + motorName + "/AngularVelocityRadPerSec", motorAngularVelocityRadPerSecSignal.getValueAsDouble());
-        Logger.recordOutput(logBase + motorName + "/AngularAccelerationRadPerSecSquared", motorAngularAccelerationRadPerSecSquaredSignal.getValueAsDouble());
+        Logger.recordOutput(logBase + motorName + "/AngularVelocityRotPerSec", motorAngularVelocityRotPerSecSignal.getValueAsDouble());
+        Logger.recordOutput(logBase + motorName + "/AngularAccelerationRotPerSecSquared", motorAngularAccelerationRotPerSecSquaredSignal.getValueAsDouble());
     }
 
     public double getMotorAppliedVolts() {
@@ -124,11 +124,11 @@ public class OnyxMotorInputs {
     }
 
     public double getMotorAngularVelocityRotPerSec() {
-        return motorAngularVelocityRadPerSec;
+        return motorAngularVelocityRotPerSec;
     }
 
-    public double getMotorAngularAccelerationRadPerSecSquared() {
-        return motorAngularAccelerationRadPerSecSquared;
+    public double getMotorAngularAccelerationRotPerSecSquared() {
+        return motorAngularAccelerationRotPerSecSquared;
     }
 
     public double getMotorTemperature() {

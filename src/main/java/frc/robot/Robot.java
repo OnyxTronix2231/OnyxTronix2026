@@ -13,6 +13,7 @@ import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIOSimulation;
+import frc.robot.subsystems.turret.TurretShuffleBoard;
 import frc.robot.visualization.TurretVisualization;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -39,8 +40,7 @@ public class Robot extends LoggedRobot {
 
         switch(currentRunningState) {
             case SIMULATION -> {
-                Turret.init(new TurretIOSimulation());
-                new TurretVisualization();
+
             }
             case ROBOT_A -> {
             }
@@ -48,9 +48,13 @@ public class Robot extends LoggedRobot {
                 break;
             }
         }
+        Turret.init(new TurretIOSimulation());
+        new TurretVisualization();
+        
+        new TurretShuffleBoard();
 
-            CommandSwerveDrivetrain.init(createDrivetrain());
-            Localization.init();
+//            CommandSwerveDrivetrain.init(createDrivetrain());
+//            Localization.init();
 
 
             //auto

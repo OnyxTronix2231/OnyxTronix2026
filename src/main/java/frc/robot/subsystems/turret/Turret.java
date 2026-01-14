@@ -1,6 +1,5 @@
 package frc.robot.subsystems.turret;
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID.PIDValues;
 
@@ -50,7 +49,7 @@ public class Turret extends SubsystemBase {
     }
 
     public double getTurretAcceleration() {
-        return turretInputs.turretMotorInputs.getMotorAngularAccelerationRadPerSecSquared()   ;
+        return turretInputs.turretMotorInputs.getMotorAngularAccelerationRotPerSecSquared()   ;
     }
 
     public Turret(TurretIO turretIO) {
