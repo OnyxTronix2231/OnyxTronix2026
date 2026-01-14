@@ -7,7 +7,7 @@ import frc.robot.lib.PID.PIDValues;
 import java.util.function.DoubleUnaryOperator;
 
 public class ArcConstants {
-    public static final int ARC_MOTOR_ID = 1;
+    public static final int ARC_MOTOR_ID = 9;
 
     public static final int ARC_NUM_OF_MOTORS = 1;
 
