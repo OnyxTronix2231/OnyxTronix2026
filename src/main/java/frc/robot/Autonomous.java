@@ -14,7 +14,7 @@ public class Autonomous {
         autoChooser = AutoBuilder.buildAutoChooser();
         addAllEvents();
         addAllTheAuto();
-        autoChooser.setDefaultOption("Example Auto", new PathPlannerAuto("Example Auto"));
+        autoChooser.setDefaultOption("prior 1", new PathPlannerAuto("prior 1"));
         Shuffleboard.getTab("auto").add(autoChooser);
     }
 
@@ -29,8 +29,11 @@ public class Autonomous {
     }
 
     public void addAllTheAuto() {
-        addAuto("Example Auto");
-        addAuto("msc");
+        addAuto("prior 1");
+        addAuto("prior 2");
+        addAuto("prior 3");
+        addAuto("prior 4");
+        addAuto("prior 5");
     }
 
     public Command getSelectedCommand() {
