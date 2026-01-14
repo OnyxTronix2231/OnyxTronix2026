@@ -14,7 +14,7 @@ public class Autonomous {
         autoChooser = AutoBuilder.buildAutoChooser();
         addAllEvents();
         addAllTheAuto();
-        autoChooser.setDefaultOption("prior 1", new PathPlannerAuto("prior 1"));
+        autoChooser.setDefaultOption("right tranch", new PathPlannerAuto("right tranch"));
         Shuffleboard.getTab("auto").add(autoChooser);
     }
 
@@ -29,11 +29,11 @@ public class Autonomous {
     }
 
     public void addAllTheAuto() {
-        addAuto("prior 1");
-        addAuto("prior 2");
-        addAuto("prior 3");
-        addAuto("prior 4");
-        addAuto("prior 5");
+        addAuto("right tranch");
+        addAuto("left tranch");
+        addAuto("right tranch with feeder");
+        addAuto("left tranch with depot");
+        addAuto("full center");
     }
 
     public Command getSelectedCommand() {
