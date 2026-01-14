@@ -22,7 +22,7 @@ public class ArcShuffleboard {
         );
 
         PIDEntries arcEntries = new PIDEntries(name, "Arc", SIMULATION_ARC_PID_VALUES);
-        tab.add("update elevator pid", new InstantCommand(() -> Arc.getInstance()
+        tab.add("update arc pid", new InstantCommand(() -> Arc.getInstance()
             .updatePID(arcEntries.getPIDValues())));
 
         tab.addString("Wanted state", () -> Arc.getInstance().getWantedState().toString());
@@ -32,5 +32,6 @@ public class ArcShuffleboard {
 
         tab.add("idle", new InstantCommand(() -> Arc.getInstance().setWantedState(Arc.WantedState.IDLE)));
         tab.add("move to angle", new InstantCommand(() -> Arc.getInstance().setWantedState(Arc.WantedState.MOVE_TO_ANGLE, targetAngle.getAsDouble())));
+        tab.add("move forwards", new InstantCommand(() -> Arc.getInstance().setWantedState(Arc.WantedState.MOVE_FORWARDS)));
     }
 }

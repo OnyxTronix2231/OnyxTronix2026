@@ -31,7 +31,7 @@ public class ArcIOSimulation implements ArcIO {
             SingleJointedArmSim.estimateMOI(SIMULATION_ARC_LENGTH_METERS, SIMULATION_ARC_MASS_KG), 1),
             DCMotor.getKrakenX60(ARC_NUM_OF_MOTORS));
 
-        arcMotorInputs = new OnyxMotorInputs(motor, "Arc", "ArcMotor");
+        arcMotorInputs = new OnyxMotorInputs(motor, "Arc", "ArcMotor", ROTATIONS_TO_DEGREES);
 
         motor.getConfigurator().apply(getTalonFXConfiguration());
     }
@@ -41,7 +41,8 @@ public class ArcIOSimulation implements ArcIO {
 
         configuration.Slot0 = SIMULATION_ARC_PID_VALUES.pidValuesToSlot0Configs();
 
-        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
         configuration.MotionMagic.MotionMagicCruiseVelocity = SIMULATION_ARC_CRUISE_VELOCITY;
         configuration.MotionMagic.MotionMagicAcceleration = SIMULATION_ARC_ACCELERATION;
         configuration.MotionMagic.MotionMagicJerk = SIMULATION_ARC_JERK;

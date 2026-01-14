@@ -11,12 +11,14 @@ public class Arc extends SubsystemBase {
 
     public enum WantedState {
         IDLE,
-        MOVE_TO_ANGLE
+        MOVE_TO_ANGLE,
+        MOVE_FORWARDS
     }
 
     public enum SystemState {
         IDLING,
-        MOVING_TO_ANGLE
+        MOVING_TO_ANGLE,
+        MOVING_FORWARDS
     }
 
     private WantedState wantedState;
@@ -79,6 +81,8 @@ public class Arc extends SubsystemBase {
                 return SystemState.IDLING;
             case MOVE_TO_ANGLE:
                 return SystemState.MOVING_TO_ANGLE;
+            case MOVE_FORWARDS:
+                return SystemState.MOVING_FORWARDS;
         }
         return SystemState.IDLING;
     }
@@ -87,6 +91,7 @@ public class Arc extends SubsystemBase {
         switch (systemState) {
             case IDLING -> idleState();
             case MOVING_TO_ANGLE -> moveToAngleState();
+            case MOVING_FORWARDS -> arcIO.setDutyCycle(0.05);
         }
     }
 

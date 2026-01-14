@@ -38,7 +38,7 @@ public class Robot extends LoggedRobot {
 
         switch (currentRunningState) {
             case SIMULATION -> {
-                Arc arc = new Arc(new ArcIOSimulation());
+                Arc.init(new ArcIOSimulation());
                 new ArcShuffleboard();
                 new ArcVisualization();
             }
