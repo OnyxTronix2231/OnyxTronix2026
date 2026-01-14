@@ -48,6 +48,14 @@ public class TurretIOSimulation implements TurretIO {
         configuration.MotionMagic.MotionMagicAcceleration = SIMULATION_TURRET_ACCELERATION;
         configuration.MotionMagic.MotionMagicJerk = SIMULATION_TURRET_JERK;
 
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Units.degreesToRotations(TURRET_FORWARD_SOFT_LIMIT_THRESHOLD);
+
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Units.degreesToRotations(TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
+        configuration.HardwareLimitSwitch.ForwardLimitEnable = false;
+        configuration.HardwareLimitSwitch.ReverseLimitEnable = false;
+
         configuration.CurrentLimits.StatorCurrentLimitEnable = true;
         configuration.CurrentLimits.StatorCurrentLimit = TURRET_STATOR_LIMIT;
 

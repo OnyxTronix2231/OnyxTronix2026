@@ -1,7 +1,12 @@
 package frc.robot.subsystems.turret;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID.PIDValues;
+
+import static frc.robot.subsystems.turret.TurretConstants.TURRET_FORWARD_SOFT_LIMIT_THRESHOLD;
+import static frc.robot.subsystems.turret.TurretConstants.TURRET_REVERSE_SOFT_LIMIT_THRESHOLD;
 
 public class Turret extends SubsystemBase {
     private final TurretIO.TurretInputs turretInputs;
@@ -49,7 +54,7 @@ public class Turret extends SubsystemBase {
     }
 
     public double getTurretAcceleration() {
-        return turretInputs.turretMotorInputs.getMotorAngularAccelerationRotPerSecSquared()   ;
+        return turretInputs.turretMotorInputs.getMotorAngularAccelerationRotPerSecSquared();
     }
 
     public Turret(TurretIO turretIO) {
@@ -71,34 +76,64 @@ public class Turret extends SubsystemBase {
         log();
     }
 
-    private void log(){
+    private void log() {
         turretInputs.turretMotorInputs.log();
     }
 
-    private SystemState handleStateTransition(){
+    private SystemState handleStateTransition() {
         return switch (wantedState) {
             case IDLE -> SystemState.IDLE;
             case MOVE_TO_POSITION -> SystemState.MOVE_TO_POSITION;
         };
     }
 
-    private void applyStates(){
-        switch(systemState){
+    private void applyStates() {
+        switch (systemState) {
             case IDLE -> idleState();
-            case MOVE_TO_POSITION -> moveToPosition(wantedAngle);
+            case MOVE_TO_POSITION -> moveToPosition();
         }
     }
 
-    private void idleState(){
+    private void idleState() {
         turretIO.setDutyCycle(0);
     }
 
-    private void moveToPosition(double angle){
-        turretIO.moveToAngle(angle);
+    private void moveToPosition() {
+        double finalAngle = calculateMovingAngle(wantedAngle,new Rotation2d(getTurretAngle()),TURRET_FORWARD_SOFT_LIMIT_THRESHOLD,TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
+        turretIO.moveToAngle(finalAngle);
     }
 
-    public boolean isTurretOnTarget(double turretTolerance){
-        return Math.abs(turretInputs.turretMotorInputs.getMotorValue().getAsDouble()-wantedAngle) < turretTolerance;
+    private double calculateMovingAngle(double wantedAngle, Rotation2d currentAngle, double forwardLimit, double reverseLimit) {
+        double currentTotalAngle = Units.rotationsToDegrees(currentAngle.getRotations());
+        double closestOffset = wantedAngle - currentAngle.getDegrees();
+        if (closestOffset > 180){
+            closestOffset -= 360;
+        }
+        if (closestOffset < -180){
+            closestOffset += 360;
+        }
+
+        double finalOffset = currentTotalAngle + closestOffset;
+        if ((currentTotalAngle + closestOffset)%360 == (currentTotalAngle - closestOffset)%360){
+            if (finalOffset > 0){
+                finalOffset = currentTotalAngle - Math.abs(closestOffset);
+            }
+            else{
+                finalOffset = currentTotalAngle + Math.abs(closestOffset);
+            }
+        }
+
+        if (finalOffset > Units.degreesToRadians(forwardLimit)) {
+            finalOffset -= 360;
+        } else if (finalOffset < Units.degreesToRadians(reverseLimit)) {
+            finalOffset += 360;
+        }
+
+        return finalOffset;
+    }
+
+    public boolean isTurretOnTarget(double turretTolerance) {
+        return Math.abs(turretInputs.turretMotorInputs.getMotorValue().getAsDouble() - wantedAngle) < turretTolerance;
     }
 
     public void updateTurretPID(PIDValues pidValues) {
