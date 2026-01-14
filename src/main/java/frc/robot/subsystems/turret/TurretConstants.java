@@ -49,7 +49,7 @@ public class TurretConstants {
     public static final double SIMULATION_TURRET_ACCELERATION = 5.5;
     public static final double SIMULATION_TURRET_JERK = 0;
 
-    public static final double SIMULATION_TURRET_KP = 10;
+    public static final double SIMULATION_TURRET_KP = 11;
     public static final double SIMULATION_TURRET_KI = 0;
     public static final double SIMULATION_TURRET_KD = 0;
     public static final double SIMULATION_TURRET_KG = 0;

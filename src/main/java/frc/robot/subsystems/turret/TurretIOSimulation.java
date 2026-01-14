@@ -34,6 +34,7 @@ public class TurretIOSimulation implements TurretIO {
                 SingleJointedArmSim.estimateMOI(SIMULATION_TURRET_LENGTH_METERS, SIMULATION_TURRET_MASS_KG), TURRET_ROTOR_TO_SENSOR_RATIO),
                 DCMotor.getKrakenX60(SIMULATION_TURRET_NUM_OF_MOTORS));
         turretMotorInputs = new OnyxMotorInputs(motor,TURRET_SUBSYSTEM_NAME,TURRET_MOTOR_NAME,ROTATIONS_TO_ANGLE);
+        motor.getConfigurator().apply(getTalonFXConfiguration());
         
     }
 

@@ -21,7 +21,7 @@ public class TurretVisualization extends VisualizedSubsystem {
 
     public class TurretVisualizationMechanism {
         private static final double TURRET_X_POSITION = 3;
-        private static final double TURRET_Y_POSITION = 0.1;
+        private static final double TURRET_Y_POSITION = 1;
         public static final LoggedMechanismRoot2d turretRoot = ROBOT_MECHANISM.getRoot("turret", TURRET_X_POSITION, TURRET_Y_POSITION);
 
         private static final double TURRET_LIGAMENT_LENGTH = 0.3;

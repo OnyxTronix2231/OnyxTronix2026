@@ -50,7 +50,6 @@ public class Robot extends LoggedRobot {
         }
         Turret.init(new TurretIOSimulation());
         new TurretVisualization();
-        
         new TurretShuffleBoard();
 
 //            CommandSwerveDrivetrain.init(createDrivetrain());
