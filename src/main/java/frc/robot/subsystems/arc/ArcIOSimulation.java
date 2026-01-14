@@ -47,6 +47,12 @@ public class ArcIOSimulation implements ArcIO {
         configuration.MotionMagic.MotionMagicAcceleration = SIMULATION_ARC_ACCELERATION;
         configuration.MotionMagic.MotionMagicJerk = SIMULATION_ARC_JERK;
 
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = DEGREES_TO_ROTATIONS.applyAsDouble(ARC_FORWARD_LIMIT_DEGREES);
+
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = DEGREES_TO_ROTATIONS.applyAsDouble(ARC_REVERSE_LIMIT_DEGREES);
+
         return configuration;
     }
 

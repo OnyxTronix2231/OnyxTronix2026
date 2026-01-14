@@ -12,6 +12,10 @@ public class ArcConstants {
     public static final int ARC_NUM_OF_MOTORS = 1;
 
     public static final DoubleUnaryOperator ROTATIONS_TO_DEGREES = rotations -> rotations * 360;
+    public static final DoubleUnaryOperator DEGREES_TO_ROTATIONS = degrees -> degrees / 360;
+
+    public static final double ARC_FORWARD_LIMIT_DEGREES = 90;
+    public static final double ARC_REVERSE_LIMIT_DEGREES = 0;
 
     public static final double SIMULATION_ARC_KP = 5;
     public static final double SIMULATION_ARC_KI = 0;
