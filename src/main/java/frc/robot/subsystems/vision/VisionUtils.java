@@ -70,7 +70,6 @@ public class VisionUtils {
     public static Pose3d getLimelightPosOnTurret(Translation3d robotToTurretVector, Translation3d turretToLimelightVector, Rotation3d turretAngle, Rotation3d limeLightToTurretOffset) {
         Translation3d rotatedVector = turretToLimelightVector.rotateBy(turretAngle);
         Rotation3d angleToLimelight = turretAngle.rotateBy(limeLightToTurretOffset);
-        LimelightHelpers.setCameraPose_RobotSpace("limelight-o", robotToTurretVector.getX(), robotToTurretVector.getY(), robotToTurretVector.getZ(), angleToLimelight.getX(), angleToLimelight.getY(), angleToLimelight.getZ());
-        return new Pose3d(robotToTurretVector.plus(rotatedVector), turretAngle.rotateBy(limeLightToTurretOffset));
+        return new Pose3d(robotToTurretVector.plus(rotatedVector), angleToLimelight);
     }
 }

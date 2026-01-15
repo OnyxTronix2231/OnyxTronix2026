@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.vision.VisionConstants;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -65,7 +69,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         updateVisualizations();
-
+        Logger.recordOutput("Apriltag map", VisionConstants.APRIL_TAG_MAP.values().toArray(new Pose3d[VisionConstants.APRIL_TAG_MAP.size()]));
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
