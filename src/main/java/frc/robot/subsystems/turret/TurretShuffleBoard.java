@@ -25,9 +25,7 @@ public class TurretShuffleBoard {
                 () -> Turret.getInstance().getTurretAcceleration()
         );
         DoubleSupplier targetAngle = () -> turret.getTargetPosition();
-
-        GenericEntry wantedSpeed = tab.add("wanted Speed", 0).getEntry();
-
+        
         //PID
         PIDEntries turretEntries = new PIDEntries(subsystemName, motorName, TURRET_PID_VALUES);
         tab.add("update turret pid", new InstantCommand(() -> Turret.getInstance().updateTurretPID(turretEntries.getPIDValues())));

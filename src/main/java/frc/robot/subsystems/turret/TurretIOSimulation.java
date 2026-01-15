@@ -53,6 +53,7 @@ public class TurretIOSimulation implements TurretIO {
 
         configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Units.degreesToRotations(TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
+
         configuration.HardwareLimitSwitch.ForwardLimitEnable = false;
         configuration.HardwareLimitSwitch.ReverseLimitEnable = false;
 
