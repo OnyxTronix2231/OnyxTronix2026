@@ -12,11 +12,34 @@ public class ArcConstants {
 
     public static final int ARC_MOTOR_ID = 9;
 
-
     public static final double ARC_FORWARD_SOFT_LIMIT_DEGREES = 90;
     public static final double ARC_REVERSE_SOFT_LIMIT_DEGREES = 0;
 
     public static final DoubleUnaryOperator ROTATIONS_TO_ANGLE = rotations -> rotations * 360;
+
+    public static final double ARC_KP = 0;
+    public static final double ARC_KI = 0;
+    public static final double ARC_KD = 0;
+    public static final double ARC_KG = 0;
+    public static final double ARC_KS = 0;
+    public static final double ARC_KV = 0;
+    public static final double ARC_KA = 0;
+    public static final PIDValues ARC_PID_VALUES = new PIDValues(
+        ARC_KP,
+        ARC_KI,
+        ARC_KD,
+        ARC_KG,
+        ARC_KS,
+        ARC_KV,
+        ARC_KA,
+        GravityTypeValue.Arm_Cosine,
+        StaticFeedforwardSignValue.UseVelocitySign
+    );
+
+    public static final double ARC_CRUISE_VELOCITY = 10;
+    public static final double ARC_ACCELERATION = 10;
+    public static final double ARC_JERK = 0;
+
 
     public static final double SIMULATION_ARC_KP = 5;
     public static final double SIMULATION_ARC_KI = 0;
