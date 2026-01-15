@@ -17,8 +17,8 @@ public class TurretConstants {
     public static final double TURRET_SUPPLY_LOWER_LIMIT = 40;
     public static final double TURRET_TIME_LOWER_LIMIT = 1;
 
-    public static final double TURRET_FORWARD_SOFT_LIMIT_THRESHOLD = 720;
-    public static final double TURRET_REVERSE_SOFT_LIMIT_THRESHOLD = -720;
+    public static final double TURRET_FORWARD_SOFT_LIMIT_THRESHOLD = 360;
+    public static final double TURRET_REVERSE_SOFT_LIMIT_THRESHOLD = -360;
 
 
     public static final double TURRET_ROTOR_TO_SENSOR_RATIO = 1;
