@@ -6,6 +6,8 @@ import frc.robot.subsystems.arc.Arc;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
+import static frc.robot.subsystems.arc.ArcConstants.ARC_SUBSYSTEM_NAME;
+
 public class ArcVisualization extends VisualizedSubsystem {
     private final Arc arc;
 
@@ -20,8 +22,8 @@ public class ArcVisualization extends VisualizedSubsystem {
 
     public class ArcVisualizationMechanism {
         private static final double ARC_X_POSITION = 2;
-        private static final double ARC_Y_POSITION = 0;
-        public static final LoggedMechanismRoot2d arcRoot = ROBOT_MECHANISM.getRoot("arc", ARC_X_POSITION, ARC_Y_POSITION);
+        private static final double ARC_Y_POSITION = 1;
+        public static final LoggedMechanismRoot2d arcRoot = ROBOT_MECHANISM.getRoot(ARC_SUBSYSTEM_NAME, ARC_X_POSITION, ARC_Y_POSITION);
 
         private static final double ARC_LIGAMENT_LENGTH = 1;
         private static final double ARC_LIGAMENT_ANGLE = 0;

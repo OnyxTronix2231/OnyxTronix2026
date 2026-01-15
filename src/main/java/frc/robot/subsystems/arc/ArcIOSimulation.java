@@ -23,17 +23,19 @@ public class ArcIOSimulation implements ArcIO {
 
     private final OnyxMotorInputs arcMotorInputs;
 
-    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
+    private final MotionMagicVoltage motionMagicVoltage;
 
     public ArcIOSimulation() {
         motor = new TalonFX(ARC_MOTOR_ID);
-        simulatedMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(ARC_NUM_OF_MOTORS),
+        simulatedMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(SIMULATION_ARC_NUM_OF_MOTORS),
             SingleJointedArmSim.estimateMOI(SIMULATION_ARC_LENGTH_METERS, SIMULATION_ARC_MASS_KG), 1),
-            DCMotor.getKrakenX60(ARC_NUM_OF_MOTORS));
+            DCMotor.getKrakenX60(SIMULATION_ARC_NUM_OF_MOTORS));
 
-        arcMotorInputs = new OnyxMotorInputs(motor, "Arc", "ArcMotor", ROTATIONS_TO_DEGREES);
+        arcMotorInputs = new OnyxMotorInputs(motor, ARC_SUBSYSTEM_NAME, ARC_MOTOR_NAME, ROTATIONS_TO_ANGLE);
 
         motor.getConfigurator().apply(getTalonFXConfiguration());
+
+        motionMagicVoltage = new MotionMagicVoltage(0).withSlot(0);
     }
 
     public TalonFXConfiguration getTalonFXConfiguration() {
@@ -48,10 +50,10 @@ public class ArcIOSimulation implements ArcIO {
         configuration.MotionMagic.MotionMagicJerk = SIMULATION_ARC_JERK;
 
         configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = DEGREES_TO_ROTATIONS.applyAsDouble(ARC_FORWARD_LIMIT_DEGREES);
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Units.degreesToRotations(ARC_FORWARD_SOFT_LIMIT_DEGREES);
 
         configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = DEGREES_TO_ROTATIONS.applyAsDouble(ARC_REVERSE_LIMIT_DEGREES);
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Units.degreesToRotations(ARC_REVERSE_SOFT_LIMIT_DEGREES);
 
         return configuration;
     }

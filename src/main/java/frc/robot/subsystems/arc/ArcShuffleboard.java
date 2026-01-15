@@ -8,11 +8,12 @@ import frc.robot.lib.PhysicalTelemetryEntries;
 
 import java.util.function.DoubleSupplier;
 
+import static frc.robot.subsystems.arc.ArcConstants.ARC_SUBSYSTEM_NAME;
 import static frc.robot.subsystems.arc.ArcConstants.SIMULATION_ARC_PID_VALUES;
 
 public class ArcShuffleboard {
     public ArcShuffleboard() {
-        String name = "Arc";
+        String name = ARC_SUBSYSTEM_NAME;
         ShuffleboardTab tab = Shuffleboard.getTab(name);
 
         PhysicalTelemetryEntries arc = new PhysicalTelemetryEntries(name, "Arc",
@@ -21,7 +22,7 @@ public class ArcShuffleboard {
             () -> Arc.getInstance().getAcceleration()
         );
 
-        PIDEntries arcEntries = new PIDEntries(name, "Arc", SIMULATION_ARC_PID_VALUES);
+        PIDEntries arcEntries = new PIDEntries(name, ARC_SUBSYSTEM_NAME, SIMULATION_ARC_PID_VALUES);
         tab.add("update arc pid", new InstantCommand(() -> Arc.getInstance()
             .updatePID(arcEntries.getPIDValues())));
 
