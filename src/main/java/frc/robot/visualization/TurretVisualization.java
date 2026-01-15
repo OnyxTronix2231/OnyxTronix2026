@@ -6,6 +6,8 @@ import frc.robot.subsystems.turret.Turret;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
+import static frc.robot.subsystems.turret.TurretConstants.TURRET_SUBSYSTEM_NAME;
+
 public class TurretVisualization extends VisualizedSubsystem {
 
     private final Turret turret;
@@ -22,7 +24,7 @@ public class TurretVisualization extends VisualizedSubsystem {
     public class TurretVisualizationMechanism {
         private static final double TURRET_X_POSITION = 3;
         private static final double TURRET_Y_POSITION = 1;
-        public static final LoggedMechanismRoot2d turretRoot = ROBOT_MECHANISM.getRoot("turret", TURRET_X_POSITION, TURRET_Y_POSITION);
+        public static final LoggedMechanismRoot2d turretRoot = ROBOT_MECHANISM.getRoot(TURRET_SUBSYSTEM_NAME, TURRET_X_POSITION, TURRET_Y_POSITION);
 
         private static final double TURRET_LIGAMENT_LENGTH = 0.3;
         private static final double TURRET_LIGAMENT_ANGLE = 180;
