@@ -1,5 +1,6 @@
 package frc.robot.subsystems.turret;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -99,7 +100,7 @@ public class Turret extends SubsystemBase {
     }
 
     private void moveToPosition() {
-        double finalAngle = calculateMovingAngle(wantedAngle,new Rotation2d(getTurretAngle()),TURRET_FORWARD_SOFT_LIMIT_THRESHOLD,TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
+        double finalAngle = calculateMovingAngle(wantedAngle,new Rotation2d(Units.degreesToRotations(getTurretAngle())),TURRET_FORWARD_SOFT_LIMIT_THRESHOLD,TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
         turretIO.moveToAngle(finalAngle);
     }
 
@@ -132,8 +133,13 @@ public class Turret extends SubsystemBase {
         return finalOffset;
     }
 
+    private double wrapTo360(double angle) {
+        return MathUtil.inputModulus(angle, 0, 360);
+    }
+
+
     public boolean isTurretOnTarget(double turretTolerance) {
-        return Math.abs(turretInputs.turretMotorInputs.getMotorValue().getAsDouble() - wantedAngle) < turretTolerance;
+        return Math.abs(wrapTo360(getTurretAngle()) - wrapTo360(wantedAngle)) < turretTolerance;
     }
 
     public void updateTurretPID(PIDValues pidValues) {
