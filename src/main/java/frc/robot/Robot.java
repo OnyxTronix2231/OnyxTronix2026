@@ -40,25 +40,20 @@ public class Robot extends LoggedRobot {
 
         switch(currentRunningState) {
             case SIMULATION -> {
-
+                Turret.init(new TurretIOSimulation());
+                new TurretVisualization();
+                new TurretShuffleBoard();
             }
             case ROBOT_A -> {
             }
             case ROBOT_B -> {
-                break;
             }
         }
-        Turret.init(new TurretIOSimulation());
-        new TurretVisualization();
-        new TurretShuffleBoard();
-
             CommandSwerveDrivetrain.init(createDrivetrain());
             Localization.init();
 
-
             //auto
 //            auto = new Autonomous();
-
     }
 
     /**

@@ -85,13 +85,10 @@ public class Turret extends SubsystemBase {
     }
 
     private SystemState handleStateTransition() {
-        switch (wantedState) {
-            case IDLE:
-                return SystemState.IDLE;
-            case MOVE_TO_POSITION:
-                return SystemState.MOVE_TO_POSITION;
-        }
-        return SystemState.IDLE;
+        return switch (wantedState) {
+            case IDLE -> SystemState.IDLE;
+            case MOVE_TO_POSITION -> SystemState.MOVE_TO_POSITION;
+        };
     }
 
     private void applyStates() {
