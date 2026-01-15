@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID.PIDValues;
+import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.subsystems.turret.TurretConstants.TURRET_FORWARD_SOFT_LIMIT_THRESHOLD;
 import static frc.robot.subsystems.turret.TurretConstants.TURRET_REVERSE_SOFT_LIMIT_THRESHOLD;
@@ -100,13 +101,14 @@ public class Turret extends SubsystemBase {
     }
 
     private void moveToPosition() {
-        double finalAngle = calculateMovingAngle(wantedAngle,new Rotation2d(Units.degreesToRotations(getTurretAngle())),TURRET_FORWARD_SOFT_LIMIT_THRESHOLD,TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
-        turretIO.moveToAngle(finalAngle);
+        wantedAngle = calculateMovingAngle(wantedAngle,getTurretAngle(),TURRET_FORWARD_SOFT_LIMIT_THRESHOLD,TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
+        turretIO.moveToAngle(wantedAngle);
     }
 
-    private double calculateMovingAngle(double wantedAngle, Rotation2d currentAngle, double forwardLimit, double reverseLimit) {
-        double currentTotalAngle = Units.rotationsToDegrees(currentAngle.getRotations());
-        double closestOffset = wantedAngle - currentAngle.getDegrees();
+    private double calculateMovingAngle(double wantedAngle, double currentAngle, double forwardLimit, double reverseLimit) {
+        Logger.recordOutput("currentTotalAngle", currentAngle);
+        double closestOffset = wantedAngle - wrapTo360(currentAngle);
+
         if (closestOffset > 180){
             closestOffset -= 360;
         }
@@ -114,21 +116,25 @@ public class Turret extends SubsystemBase {
             closestOffset += 360;
         }
 
-        double finalOffset = currentTotalAngle + closestOffset;
-        if ((currentTotalAngle + closestOffset)%360 == (currentTotalAngle - closestOffset)%360){
-            if (finalOffset > 0){
-                finalOffset = currentTotalAngle - Math.abs(closestOffset);
-            }
-            else{
-                finalOffset = currentTotalAngle + Math.abs(closestOffset);
-            }
-        }
+        Logger.recordOutput("closestOffset",  closestOffset);
+        double finalOffset = currentAngle + closestOffset;
+//        if ((currentAngle + closestOffset)%360 - (currentAngle - closestOffset)%360 < 5){
+//            if (finalOffset > 0){
+//                finalOffset = currentAngle - Math.abs(closestOffset);
+//            }
+//            else{
+//                finalOffset = currentAngle + Math.abs(closestOffset);
+//            }
+//        }
+        Logger.recordOutput("finalOffset",  finalOffset);
 
-        if (finalOffset > Units.degreesToRadians(forwardLimit)) {
+        if (finalOffset > forwardLimit) {
             finalOffset -= 360;
-        } else if (finalOffset < Units.degreesToRadians(reverseLimit)) {
+        } else if (finalOffset < reverseLimit) {
             finalOffset += 360;
         }
+        Logger.recordOutput("finalOffset2",  finalOffset);
+
 
         return finalOffset;
     }

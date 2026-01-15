@@ -40,6 +40,6 @@ public class TurretShuffleBoard {
         tab.add("moveToPosition", new InstantCommand(() -> Turret.getInstance().setWantedState(Turret.WantedState.MOVE_TO_POSITION,targetAngle.getAsDouble())));
 
         //IS ON TARGET
-        tab.addBoolean("is elevator on target", () -> Turret.getInstance().isTurretOnTarget(TURRET_TOLERANCE));
+        tab.addBoolean("is turret on target", () -> Turret.getInstance().isTurretOnTarget(TURRET_TOLERANCE));
     }
 }
