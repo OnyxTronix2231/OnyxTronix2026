@@ -30,6 +30,7 @@ public class TurretConstants {
     public static final DoubleUnaryOperator ROTATIONS_TO_ANGLE = rotations -> rotations * 360;
 
     public static final double TURRET_TOLERANCE = 2;
+    public static final double SAME_DISTANCE_THRESHOLD = 3;
 
     public static final double TURRET_CRUISE_VELOCITY = 8;
     public static final double TURRET_ACCELERATION = 10;
