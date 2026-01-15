@@ -10,7 +10,10 @@ public class TurretConstants {
     public static final String TURRET_SUBSYSTEM_NAME = "Turret";
     public static final String TURRET_MOTOR_NAME = "turretMotor";
 
-    public static final int TURRET_MOTOR_ID = 1;
+    public static final int TURRET_MOTOR_ID = 20;
+
+    public static final int TURRET_CANCODER_ID = 5;
+    public static final double TURRET_CANCODER_OFFSET = 0;
 
     public static final double TURRET_STATOR_LIMIT = 120;
     public static final double TURRET_SUPPLY_LIMIT = 70;
@@ -27,6 +30,11 @@ public class TurretConstants {
     public static final DoubleUnaryOperator ROTATIONS_TO_ANGLE = rotations -> rotations * 360;
 
     public static final double TURRET_TOLERANCE = 2;
+
+    public static final double TURRET_CRUISE_VELOCITY = 8;
+    public static final double TURRET_ACCELERATION = 10;
+    public static final double TURRET_JERK = 0;
+
 
     public static final double TURRET_KP = 10;
     public static final double TURRET_KI = 0;

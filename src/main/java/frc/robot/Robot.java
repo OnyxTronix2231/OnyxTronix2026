@@ -52,8 +52,8 @@ public class Robot extends LoggedRobot {
         new TurretVisualization();
         new TurretShuffleBoard();
 
-//            CommandSwerveDrivetrain.init(createDrivetrain());
-//            Localization.init();
+            CommandSwerveDrivetrain.init(createDrivetrain());
+            Localization.init();
 
 
             //auto

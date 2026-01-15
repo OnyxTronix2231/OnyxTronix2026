@@ -2,7 +2,6 @@ package frc.robot.subsystems.turret;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
@@ -12,7 +11,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.lib.OnyxMotorInputs;
 import frc.robot.lib.PID.PIDValues;
 
@@ -26,16 +24,18 @@ public class TurretIOSimulation implements TurretIO {
 
     private final OnyxMotorInputs turretMotorInputs;
 
-    private final MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0.0).withSlot(TURRET_MOTION_MAGIC_DEFAULT_SLOT);
+    private final MotionMagicVoltage motionMagicVoltage;
 
     public TurretIOSimulation() {
         motor = new TalonFX(TURRET_MOTOR_ID);
         simulatedMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(SIMULATION_TURRET_NUM_OF_MOTORS),
                 SingleJointedArmSim.estimateMOI(SIMULATION_TURRET_LENGTH_METERS, SIMULATION_TURRET_MASS_KG), TURRET_ROTOR_TO_SENSOR_RATIO),
                 DCMotor.getKrakenX60(SIMULATION_TURRET_NUM_OF_MOTORS));
-        turretMotorInputs = new OnyxMotorInputs(motor,TURRET_SUBSYSTEM_NAME,TURRET_MOTOR_NAME,ROTATIONS_TO_ANGLE);
+        turretMotorInputs = new OnyxMotorInputs(motor, TURRET_SUBSYSTEM_NAME, TURRET_MOTOR_NAME, ROTATIONS_TO_ANGLE);
+
         motor.getConfigurator().apply(getTalonFXConfiguration());
-        
+
+        motionMagicVoltage = new MotionMagicVoltage(0.0).withSlot(TURRET_MOTION_MAGIC_DEFAULT_SLOT);
     }
 
     public TalonFXConfiguration getTalonFXConfiguration() {

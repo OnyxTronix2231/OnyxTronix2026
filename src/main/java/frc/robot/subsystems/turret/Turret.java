@@ -24,9 +24,9 @@ public class Turret extends SubsystemBase {
         MOVE_TO_POSITION,
     }
 
-    private WantedState wantedState = WantedState.IDLE;
-    private SystemState previousSystemState = SystemState.IDLE;
-    private SystemState systemState = SystemState.IDLE;
+    private WantedState wantedState;
+    private SystemState previousSystemState;
+    private SystemState systemState;
 
     public void setWantedState(WantedState wantedState) {
         this.wantedState = wantedState;
@@ -63,6 +63,9 @@ public class Turret extends SubsystemBase {
         this.turretIO.updateInputs(turretInputs);
 
         wantedAngle = 0;
+        wantedState = WantedState.IDLE;
+        systemState = SystemState.IDLE;
+        previousSystemState = systemState;
     }
 
     @Override
@@ -72,6 +75,8 @@ public class Turret extends SubsystemBase {
         systemState = handleStateTransition();
 
         applyStates();
+
+        previousSystemState = systemState;
 
         log();
     }
