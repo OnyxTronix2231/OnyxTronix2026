@@ -41,26 +41,49 @@ public class ScoringManager {
         }
     }
 
+    public boolean isOnNearestBump() {
+        Pose2d botPose = Localization.getInstance().getBotPose();
+        Pose2d bumpCenter = getNearestBump();
+        return isInRect(botPose,BUMP_LENGTH_X,BUMP_LENGTH_Y,bumpCenter);
+    }
+
+    public Pose2d getNearestTrench() {
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        Pose2d botPose = Localization.getInstance().getBotPose();
+        if (alliance == DriverStation.Alliance.Blue) {
+            return nearestPos(botPose, BLUE_RIGHT_TRENCH, BLUE_LEFT_TRENCH);
+        } else {
+            return nearestPos(botPose,flipPose(BLUE_RIGHT_TRENCH), flipPose(BLUE_LEFT_TRENCH));
+        }
+    }
+
+    public boolean isUnderNearestTrench() {
+        Pose2d botPose = Localization.getInstance().getBotPose();
+        Pose2d trenchCenter = getNearestTrench();
+        return isInRect(botPose,TRENCH_LENGTH_X,TRENCH_LENGTH_Y,trenchCenter);
+    }
+
     public boolean isInHub(Translation2d pos) {
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d center = alliance == DriverStation.Alliance.Blue ? BLUE_HUB.toPose2d() : flipPose(BLUE_HUB.toPose2d());
         return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), HUB_LENGTH, HUB_LENGTH, center);
     }
 
-    public boolean canDeliver(Pose2d deliveryPose) {
+    public Pose2d getDeliveryTarget(){
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();
-        Pose2d hubPose = BLUE_HUB.toPose2d();
-        if (alliance == DriverStation.Alliance.Red) {
-            hubPose = flipPose(BLUE_HUB.toPose2d());
+        if (alliance == DriverStation.Alliance.Blue) {
+            if (botPose.getTranslation().getY() <= FIELD_MAX_Y/2) {
+                return BLUE_RIGHT_DELIVERY;
+            }
+            return BLUE_LEFT_DELIVERY;
         }
-
-        Translation2d vector = new Translation2d(deliveryPose.getX() - botPose.getX(), deliveryPose.getY() - botPose.getY());
-        Translation2d hub_vector = new Translation2d(hubPose.getX() - botPose.getX(), hubPose.getY() - botPose.getY());
-
-        double length = hub_vector.getNorm();
-        vector = new Translation2d(vector.getX() * (length / vector.getNorm()), vector.getY() * (length / vector.getNorm()));
-        return !isInHub(vector.minus(botPose.getTranslation()).times(-1));
+        else{
+            if (botPose.getTranslation().getY() <= FIELD_MAX_Y/2) {
+                return flipPose(BLUE_RIGHT_DELIVERY);
+            }
+            return flipPose(BLUE_LEFT_DELIVERY);
+        }
     }
 
     private static ScoringManager instance;

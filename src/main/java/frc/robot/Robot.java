@@ -52,9 +52,6 @@ public class Robot extends LoggedRobot {
 
         //auto
 //            auto = new Autonomous();
-
-        Logger.recordOutput("Delivery", BLUE_RIGHT_DELIVERY);
-        Logger.recordOutput("left delivery", BLUE_LEFT_DELIVERY);
     }
 
     /**
