@@ -15,8 +15,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import static frc.robot.data.FieldConstants.BLUE_RIGHT_BUMP;
-import static frc.robot.data.FieldUtils.flipPose;
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
 import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
 
@@ -51,7 +49,6 @@ public class Robot extends LoggedRobot {
         Localization.init();
         ScoringManager.init();
 
-
         //auto
 //            auto = new Autonomous();
 
@@ -73,10 +70,6 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        Logger.recordOutput("nearstBump",ScoringManager.getInstance().getNearestBump());
-        Logger.recordOutput("isInHub",ScoringManager.getInstance().isInHub(Localization.getInstance().getBotPose().getTranslation()));
-        Logger.recordOutput("",ScoringManager.getInstance().canDeliver(Localization.getInstance().getBotPose().getTranslation()));
-
     }
 
     /**
