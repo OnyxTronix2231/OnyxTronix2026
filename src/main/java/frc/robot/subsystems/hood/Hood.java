@@ -90,8 +90,8 @@ public class Hood extends SubsystemBase {
     public void applyStates() {
         switch (systemState) {
             case IDLING -> idleState();
-            case MOVING_TO_ANGLE -> moveToAngleState();
-            case MOVING_FORWARDS -> hoodIO.setDutyCycle(0.05);
+            case MOVING_TO_ANGLE -> moveToAngle();
+            case MOVING_FORWARDS -> moveForwards();
         }
     }
 
@@ -99,8 +99,12 @@ public class Hood extends SubsystemBase {
         hoodIO.setDutyCycle(0);
     }
 
-    private void moveToAngleState() {
+    private void moveToAngle() {
         hoodIO.moveToAngle(wantedAngle);
+    }
+
+    private void moveForwards() {
+        hoodIO.setDutyCycle(0.05);
     }
 
     public void updatePID(PIDValues pidValues) {
