@@ -27,7 +27,9 @@ public class FieldConstants {
 
     public static Pose2d BLUE_FEEDER = new Pose2d(0, 0.650748, new Rotation2d(0));
 
-    public static Pose2d BLUE_RIGHT_DELIVERY = new Pose2d(7, 1.5, new Rotation2d(Math.toRadians(0)));
+    public static Pose2d BLUE_RIGHT_DELIVERY = new Pose2d(1.8446496, 1.5, new Rotation2d(Math.toRadians(0)));
+
+    public static Pose2d BLUE_LEFT_DELIVERY = new Pose2d(1.8446496, FIELD_MAX_Y - 1.5, new Rotation2d(Math.toRadians(0)));
 
     public static Pose3d BLUE_HUB = new Pose3d(4.625594, 4.034536, 1.8288, new Rotation3d(0, 0, 0));
     public static double HUB_LENGTH = 1.1938;

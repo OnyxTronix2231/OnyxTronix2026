@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import static frc.robot.data.FieldConstants.*;
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
 import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
 
@@ -52,6 +53,8 @@ public class Robot extends LoggedRobot {
         //auto
 //            auto = new Autonomous();
 
+        Logger.recordOutput("Delivery", BLUE_RIGHT_DELIVERY);
+        Logger.recordOutput("left delivery", BLUE_LEFT_DELIVERY);
     }
 
     /**
