@@ -1,13 +1,13 @@
-package frc.robot.subsystems.arc;
+package frc.robot.subsystems.hood;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.PID.PIDValues;
 import org.littletonrobotics.junction.Logger;
 
-public class Arc extends SubsystemBase {
-    private final ArcIO.ArcInputs arcInputs;
-    private final ArcIO arcIO;
+public class Hood extends SubsystemBase {
+    private final HoodIO.HoodInputs hoodInputs;
+    private final HoodIO hoodIO;
 
     public enum WantedState {
         IDLE,
@@ -46,10 +46,10 @@ public class Arc extends SubsystemBase {
         return systemState;
     }
 
-    public Arc(ArcIO arcIO) {
-        this.arcInputs = new ArcIO.ArcInputs();
-        this.arcIO = arcIO;
-        this.arcIO.updateInputs(arcInputs);
+    public Hood(HoodIO hoodIO) {
+        this.hoodInputs = new HoodIO.HoodInputs();
+        this.hoodIO = hoodIO;
+        this.hoodIO.updateInputs(hoodInputs);
 
         this.wantedState = WantedState.IDLE;
         this.systemState = SystemState.IDLING;
@@ -60,7 +60,7 @@ public class Arc extends SubsystemBase {
 
     @Override
     public void periodic() {
-        arcIO.updateInputs(arcInputs);
+        hoodIO.updateInputs(hoodInputs);
 
         double timestamp = Timer.getFPGATimestamp();
 
@@ -68,11 +68,11 @@ public class Arc extends SubsystemBase {
 
         applyStates();
 
-        arcInputs.arcMotorInputs.log();
+        hoodInputs.hoodMotorInputs.log();
 
         previousSystemState = systemState;
 
-        Logger.recordOutput("Subsystems/Arc/PeriodicTime", timestamp - Timer.getFPGATimestamp());
+        Logger.recordOutput("Subsystems/Hood/PeriodicTime", timestamp - Timer.getFPGATimestamp());
     }
 
     public SystemState handleStateTransition() {
@@ -91,43 +91,43 @@ public class Arc extends SubsystemBase {
         switch (systemState) {
             case IDLING -> idleState();
             case MOVING_TO_ANGLE -> moveToAngleState();
-            case MOVING_FORWARDS -> arcIO.setDutyCycle(0.05);
+            case MOVING_FORWARDS -> hoodIO.setDutyCycle(0.05);
         }
     }
 
     private void idleState() {
-        arcIO.setDutyCycle(0);
+        hoodIO.setDutyCycle(0);
     }
 
     private void moveToAngleState() {
-        arcIO.moveToAngle(wantedAngle);
+        hoodIO.moveToAngle(wantedAngle);
     }
 
     public void updatePID(PIDValues pidValues) {
-        arcIO.updatePID(pidValues);
+        hoodIO.updatePID(pidValues);
     }
 
     public double getAngle() {
-        return arcInputs.arcMotorInputs.getMotorValue().getAsDouble();
+        return hoodInputs.hoodMotorInputs.getMotorValue().getAsDouble();
     }
 
     public double getVelocity() {
-        return arcInputs.arcMotorInputs.getMotorAngularVelocityRotPerSec();
+        return hoodInputs.hoodMotorInputs.getMotorAngularVelocityRotPerSec();
     }
 
     public double getAcceleration() {
-        return arcInputs.arcMotorInputs.getMotorAngularAccelerationRadPerSecSquared();
+        return hoodInputs.hoodMotorInputs.getMotorAngularAccelerationRadPerSecSquared();
     }
 
-    private static Arc instance;
+    private static Hood instance;
 
-    public static void init(ArcIO arcIO) {
+    public static void init(HoodIO hoodIO) {
         if (instance == null) {
-            instance = new Arc(arcIO);
+            instance = new Hood(hoodIO);
         }
     }
 
-    public static Arc getInstance() {
+    public static Hood getInstance() {
         return instance;
     }
 }

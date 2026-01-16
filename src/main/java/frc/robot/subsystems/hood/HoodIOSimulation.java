@@ -1,4 +1,4 @@
-package frc.robot.subsystems.arc;
+package frc.robot.subsystems.hood;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -15,23 +15,24 @@ import frc.robot.lib.OnyxMotorInputs;
 import frc.robot.lib.PID.PIDValues;
 
 import static frc.robot.Constants.SIMULATION_DT_SECONDS;
-import static frc.robot.subsystems.arc.ArcConstants.*;
+import static frc.robot.subsystems.hood.HoodConstants.*;
 
-public class ArcIOSimulation implements ArcIO {
+public class HoodIOSimulation implements HoodIO {
+
     private final TalonFX motor;
     private final DCMotorSim simulatedMotor;
 
-    private final OnyxMotorInputs arcMotorInputs;
+    private final OnyxMotorInputs hoodMotorInputs;
 
     private final MotionMagicVoltage motionMagicVoltage;
 
-    public ArcIOSimulation() {
-        motor = new TalonFX(ARC_MOTOR_ID);
-        simulatedMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(SIMULATION_ARC_NUM_OF_MOTORS),
-            SingleJointedArmSim.estimateMOI(SIMULATION_ARC_LENGTH_METERS, SIMULATION_ARC_MASS_KG), 1),
-            DCMotor.getKrakenX60(SIMULATION_ARC_NUM_OF_MOTORS));
+    public HoodIOSimulation() {
+        motor = new TalonFX(HOOD_MOTOR_ID);
+        simulatedMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(SIMULATION_HOOD_NUM_OF_MOTORS),
+            SingleJointedArmSim.estimateMOI(SIMULATION_HOOD_LENGTH_METERS, SIMULATION_HOOD_MASS_KG), 1),
+            DCMotor.getKrakenX60(SIMULATION_HOOD_NUM_OF_MOTORS));
 
-        arcMotorInputs = new OnyxMotorInputs(motor, ARC_SUBSYSTEM_NAME, ARC_MOTOR_NAME, ROTATIONS_TO_ANGLE);
+        hoodMotorInputs = new OnyxMotorInputs(motor, HOOD_SUBSYSTEM_NAME, HOOD_MOTOR_NAME, ROTATIONS_TO_ANGLE);
 
         motor.getConfigurator().apply(getTalonFXConfiguration());
 
@@ -41,29 +42,29 @@ public class ArcIOSimulation implements ArcIO {
     public TalonFXConfiguration getTalonFXConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Slot0 = SIMULATION_ARC_PID_VALUES.pidValuesToSlot0Configs();
+        configuration.Slot0 = SIMULATION_HOOD_PID_VALUES.pidValuesToSlot0Configs();
 
         configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-        configuration.MotionMagic.MotionMagicCruiseVelocity = SIMULATION_ARC_CRUISE_VELOCITY;
-        configuration.MotionMagic.MotionMagicAcceleration = SIMULATION_ARC_ACCELERATION;
-        configuration.MotionMagic.MotionMagicJerk = SIMULATION_ARC_JERK;
+        configuration.MotionMagic.MotionMagicCruiseVelocity = SIMULATION_HOOD_CRUISE_VELOCITY;
+        configuration.MotionMagic.MotionMagicAcceleration = SIMULATION_HOOD_ACCELERATION;
+        configuration.MotionMagic.MotionMagicJerk = SIMULATION_HOOD_JERK;
 
         configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Units.degreesToRotations(ARC_FORWARD_SOFT_LIMIT_DEGREES);
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Units.degreesToRotations(HOOD_FORWARD_SOFT_LIMIT_DEGREES);
 
         configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Units.degreesToRotations(ARC_REVERSE_SOFT_LIMIT_DEGREES);
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Units.degreesToRotations(HOOD_REVERSE_SOFT_LIMIT_DEGREES);
 
         return configuration;
     }
 
     @Override
-    public void updateInputs(ArcInputs inputs) {
+    public void updateInputs(HoodInputs inputs) {
         updateMotor();
 
-        arcMotorInputs.updateInputs();
-        inputs.arcMotorInputs = arcMotorInputs;
+        hoodMotorInputs.updateInputs();
+        inputs.hoodMotorInputs = hoodMotorInputs;
     }
 
 

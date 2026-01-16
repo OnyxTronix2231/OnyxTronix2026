@@ -7,12 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.arc.Arc;
-import frc.robot.subsystems.arc.ArcIOSimulation;
-import frc.robot.subsystems.arc.ArcShuffleboard;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIOSimulation;
+import frc.robot.subsystems.hood.HoodShuffleboard;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.visualization.ArcVisualization;
+import frc.robot.visualization.HoodVisualization;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -38,9 +38,9 @@ public class Robot extends LoggedRobot {
 
         switch (currentRunningState) {
             case SIMULATION -> {
-                Arc.init(new ArcIOSimulation());
-                new ArcShuffleboard();
-                new ArcVisualization();
+                Hood.init(new HoodIOSimulation());
+                new HoodShuffleboard();
+                new HoodVisualization();
             }
             case ROBOT_A -> {
 
