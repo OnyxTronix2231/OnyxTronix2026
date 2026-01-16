@@ -1,8 +1,13 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
-
 import static frc.robot.subsystems.vision.VisionConstants.*;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.LimelightHelpers;
 
 public class VisionUtils {
     public static double interpolate(double distance, double minDev, double maxDev, double minDist, double maxDist) {
@@ -27,7 +32,6 @@ public class VisionUtils {
                         isAboveSlope(pose, BLUE_LEFT_CORNER_A, BLUE_LEFT_CORNER_C) ||
                         isAboveSlope(pose, BLUE_RIGHT_CORNER_B, BLUE_RIGHT_CORNER_A)
                 ));
-
 
     }
 
@@ -62,5 +66,15 @@ public class VisionUtils {
             return false;
 
         return !isintriangle(pose);
+    }
+
+    public static Pose3d getLimelightPosOnTurret(Translation3d robotToTurretVector, Translation3d turretToLimelightVector, Rotation3d turretAngle, Rotation3d limeLightToTurretOffset) {
+        Translation3d rotatedVector = turretToLimelightVector.rotateBy(turretAngle);
+        Rotation3d angleToLimelight = turretAngle.rotateBy(limeLightToTurretOffset);
+        return new Pose3d(robotToTurretVector.plus(rotatedVector), angleToLimelight);
+    }
+
+    public static double rotateTurretToApriltag(double tx){
+        return new PIDController(10, 0, 0).calculate(tx);
     }
 }

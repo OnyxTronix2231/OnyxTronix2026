@@ -4,12 +4,20 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.data.ScoringManager;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.vision.VisionConstants;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.turret.TurretIOSimulation;
+import frc.robot.subsystems.turret.TurretShuffleBoard;
+import frc.robot.visualization.TurretVisualization;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -27,7 +35,7 @@ import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
  */
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
-//    private Autonomous auto;
+    private Autonomous auto;
 
     public static Constants.RunningState currentRunningState = isSimulation() ? Constants.RunningState.SIMULATION : Constants.RunningState.ROBOT_B;
 
@@ -35,23 +43,23 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         initializeLogger();
 
-//        switch(currentRunningState) {
-//            case SIMULATION -> {
-//
-//            }
-//            case ROBOT_A -> {
-//
-//            }
-//            case ROBOT_B -> {
-//
-//            }
-//        }
-        CommandSwerveDrivetrain.init(createDrivetrain());
-        Localization.init();
-        ScoringManager.init();
+        switch(currentRunningState) {
+            case SIMULATION -> {
+                Turret.init(new TurretIOSimulation());
+                new TurretVisualization();
+                new TurretShuffleBoard();
+            }
+            case ROBOT_A -> {
+            }
+            case ROBOT_B -> {
+            }
+        }
+            CommandSwerveDrivetrain.init(createDrivetrain());
+            Localization.init();
 
-        //auto
-//            auto = new Autonomous();
+            //auto
+            auto = new Autonomous();
+
     }
 
     /**
@@ -64,7 +72,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         updateVisualizations();
-
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -87,7 +94,8 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
 
         // schedule the autonomous command (example)
-//        m_autonomousCommand = auto.getSelectedCommand();
+        CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.AUTO);
+        m_autonomousCommand = auto.getSelectedCommand();
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
@@ -106,6 +114,8 @@ public class Robot extends LoggedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
+        CommandSwerveDrivetrain.getInstance().setWantedState(CommandSwerveDrivetrain.WantedState.TELEOP);
+
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
