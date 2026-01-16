@@ -7,6 +7,7 @@ import frc.robot.subsystems.localization.Localization;
 import java.util.List;
 
 import static frc.robot.data.FieldConstants.*;
+import static frc.robot.data.FieldUtils.flipPose;
 
 
 public class ScoringManager {
