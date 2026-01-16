@@ -1,8 +1,11 @@
 package frc.robot.subsystems.turret;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.lib.PID.PIDValues;
+import frc.robot.subsystems.vision.VisionConstants;
 
 import static frc.robot.Constants.DEGREES_IN_A_CIRCLE;
 import static frc.robot.subsystems.turret.TurretConstants.*;
@@ -12,15 +15,18 @@ public class Turret extends SubsystemBase {
     private final TurretIO turretIO;
 
     private double wantedAngle;
+    private double wantedSpeed;
 
     public enum WantedState {
         IDLE,
         MOVE_TO_POSITION,
+        AIM_TO_APRILTAG
     }
 
     public enum SystemState {
         IDLE,
         MOVE_TO_POSITION,
+        AIMING_TO_APRILTAG
     }
 
     private WantedState wantedState;
@@ -88,6 +94,7 @@ public class Turret extends SubsystemBase {
         return switch (wantedState) {
             case IDLE -> SystemState.IDLE;
             case MOVE_TO_POSITION -> SystemState.MOVE_TO_POSITION;
+            case AIM_TO_APRILTAG -> SystemState.AIMING_TO_APRILTAG;
         };
     }
 
@@ -95,6 +102,7 @@ public class Turret extends SubsystemBase {
         switch (systemState) {
             case IDLE -> idleState();
             case MOVE_TO_POSITION -> moveToPosition();
+            case AIMING_TO_APRILTAG -> aimToApriltag(VisionConstants.LimelightConstants.LIMELIGHT_TURRET.NAME);
         }
     }
 
@@ -105,6 +113,10 @@ public class Turret extends SubsystemBase {
     private void moveToPosition() {
         wantedAngle = calculateMovingAngle(wantedAngle, getTurretAngle(), TURRET_FORWARD_SOFT_LIMIT_THRESHOLD, TURRET_REVERSE_SOFT_LIMIT_THRESHOLD);
         turretIO.moveToAngle(wantedAngle);
+    }
+
+    private void moveBySpeed(double speed) {
+        turretIO.setDutyCycle(speed);
     }
 
     private double calculateMovingAngle(double wantedAngle, double currentAngle, double forwardLimit, double reverseLimit) {
@@ -138,6 +150,9 @@ public class Turret extends SubsystemBase {
         return MathUtil.inputModulus(angle, 0, DEGREES_IN_A_CIRCLE);
     }
 
+    private void aimToApriltag(String limelightName){
+        moveBySpeed(new PIDController(APRILTAG_KP,APRILTAG_KI,APRILTAG_KD).calculate(LimelightHelpers.getTX(limelightName)));
+    }
 
     public boolean isTurretOnTarget(double turretTolerance) {
         return Math.abs(wrapTo360(getTurretAngle()) - wrapTo360(wantedAngle)) < turretTolerance;
