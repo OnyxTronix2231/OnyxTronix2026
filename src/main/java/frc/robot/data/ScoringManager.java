@@ -38,36 +38,35 @@ public class ScoringManager {
         this.climbingSide = climbingSide;
     }
 
-    public Pose2d getNearestBump() {
+    public Pose2d getNearestPos(Pose2d pos1, Pose2d pos2) {
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();
         if (alliance == DriverStation.Alliance.Blue) {
-            return nearestPos(botPose, BLUE_RIGHT_BUMP, BLUE_LEFT_BUMP);
+            return nearestPos(botPose, pos1, pos2);
         } else {
-            return nearestPos(botPose,flipPose(BLUE_RIGHT_BUMP), flipPose(BLUE_LEFT_BUMP));
+            return nearestPos(botPose,flipPose(pos1), flipPose(pos2));
         }
+    }
+
+    public boolean isRobotInRect(double x, double y, Pose2d centerOfRect){
+        Pose2d botPose = Localization.getInstance().getBotPose();
+        return isInRect(botPose,x,y,centerOfRect);
+    }
+
+    public Pose2d getNearestBump() {
+        return getNearestPos(BLUE_RIGHT_BUMP,BLUE_LEFT_BUMP);
     }
 
     public boolean isOnNearestBump() {
-        Pose2d botPose = Localization.getInstance().getBotPose();
-        Pose2d bumpCenter = getNearestBump();
-        return isInRect(botPose,BUMP_LENGTH_X,BUMP_LENGTH_Y,bumpCenter);
+        return isRobotInRect(BUMP_LENGTH_X,BUMP_LENGTH_Y,getNearestBump());
     }
 
     public Pose2d getNearestTrench() {
-        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
-        Pose2d botPose = Localization.getInstance().getBotPose();
-        if (alliance == DriverStation.Alliance.Blue) {
-            return nearestPos(botPose, BLUE_RIGHT_TRENCH, BLUE_LEFT_TRENCH);
-        } else {
-            return nearestPos(botPose,flipPose(BLUE_RIGHT_TRENCH), flipPose(BLUE_LEFT_TRENCH));
-        }
+        return getNearestPos(BLUE_RIGHT_TRENCH,BLUE_LEFT_TRENCH);
     }
 
     public boolean isUnderNearestTrench() {
-        Pose2d botPose = Localization.getInstance().getBotPose();
-        Pose2d trenchCenter = getNearestTrench();
-        return isInRect(botPose,TRENCH_LENGTH_X,TRENCH_LENGTH_Y,trenchCenter);
+        return isRobotInRect(TRENCH_LENGTH_X,TRENCH_LENGTH_Y,getNearestTrench());
     }
 
     public boolean isInHub(Translation2d pos) {
