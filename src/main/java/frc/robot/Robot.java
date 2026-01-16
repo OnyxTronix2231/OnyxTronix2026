@@ -10,6 +10,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIOSimulation;
+import frc.robot.subsystems.hood.HoodShuffleboard;
+import frc.robot.subsystems.localization.Localization;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.visualization.HoodVisualization;
 import frc.robot.data.ScoringManager;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -45,9 +51,12 @@ public class Robot extends LoggedRobot {
 
         switch(currentRunningState) {
             case SIMULATION -> {
-                Turret.init(new TurretIOSimulation());
-                new TurretVisualization();
-                new TurretShuffleBoard();
+//                 Turret.init(new TurretIOSimulation());
+//                 new TurretVisualization();
+//                 new TurretShuffleBoard();
+//                 Hood.init(new HoodIOSimulation());
+//                 new HoodShuffleboard();
+//                 new HoodVisualization();
             }
             case ROBOT_A -> {
             }
