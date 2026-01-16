@@ -19,7 +19,10 @@ public class Vector {
     }
 
     public Translation2d findIntersectionPoints(Vector vector){
-        return 
+        double x = getFunction()[0].getX()-vector.getFunction()[0].getX();
+        double[] tVector = {x/vector.getFunction()[1].getX(), getFunction()[1].getX()/vector.getFunction()[1].getX()};
+        double t = (getFunction()[0].getY()-vector.getFunction()[1].getY()*tVector[0])/(vector.getFunction()[1].getY()*tVector[1]-getFunction()[1].getY());
+        return new Translation2d(getFunction()[0].getX()+t*getFunction()[1].getX(), getFunction()[0].getY()+t*getFunction()[1].getY());
     }
 
 }
