@@ -13,6 +13,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
     public enum RunningState {
         SIMULATION,
         ROBOT_A,
@@ -20,4 +21,6 @@ public final class Constants {
     }
 
     public static final double SIMULATION_DT_SECONDS = 0.02;
+
+    public static final double DEGREES_IN_A_CIRCLE = 360;
 }
