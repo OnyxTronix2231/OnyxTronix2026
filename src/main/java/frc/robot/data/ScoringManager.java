@@ -61,7 +61,6 @@ public class ScoringManager {
         double length = hub_vector.getNorm();
         vector = new Translation2d(vector.getX() * (length / vector.getNorm()), vector.getY() * (length / vector.getNorm()));
         return !isInHub(vector.minus(botPose.getTranslation()).times(-1));
-
     }
 
     private static ScoringManager instance;
