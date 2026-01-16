@@ -40,5 +40,7 @@ public class FieldConstants {
 
     public static Pose2d BLUE_LEFT_TRANCHE = new Pose2d(4.625594,7.4185272,new Rotation2d(Math.toRadians(0)));
 
+    public static Pose2d BLUE_TOWER = new Pose2d(1.06172,3.730244,new Rotation2d(Math.toRadians(0)));
+
     public static Pose3d BLUE_HUB = new Pose3d(4.625594,4.034536, 1.8288, new Rotation3d(0, 0, 0));
 }

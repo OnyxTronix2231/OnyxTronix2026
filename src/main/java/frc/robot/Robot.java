@@ -14,8 +14,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import static frc.robot.data.FieldConstants.BLUE_LEFT_TRANCHE;
-import static frc.robot.data.FieldConstants.BLUE_RIGHT_TRANCHE;
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
 import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
 
@@ -48,9 +46,6 @@ public class Robot extends LoggedRobot {
 
             CommandSwerveDrivetrain.init(createDrivetrain());
             Localization.init();
-
-            Logger.recordOutput("right tranche", BLUE_RIGHT_TRANCHE);
-            Logger.recordOutput("left tranche", BLUE_LEFT_TRANCHE);
 
             //auto
 //            auto = new Autonomous();
