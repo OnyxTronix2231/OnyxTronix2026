@@ -1,7 +1,9 @@
 package frc.robot.data;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 
 public class FieldConstants {
 
@@ -14,8 +16,6 @@ public class FieldConstants {
     public static Pose2d flipPose(Pose2d pose) {
         return new Pose2d(FIELD_MAX_X - pose.getX(), FIELD_MAX_Y - pose.getY(), pose.getRotation().rotateBy(Rotation2d.kPi));
     }
-    public static Pose2d BLUE_RIGHT_BUMP  = new Pose2d(4.625594,2.51079,new Rotation2d(Math.toRadians(0)));
-    public static Pose2d BLUE_LEFT_BUMP  = new Pose2d(4.625594,5.5523892,new Rotation2d(Math.toRadians(0)));
 
     public static boolean isInField(Pose2d pose, double paddingMeters) {
         if (pose.getX() <= FIELD_MIN_X + paddingMeters)
@@ -32,4 +32,9 @@ public class FieldConstants {
         return true;
     }
 
-    }
+    public static Pose2d BLUE_RIGHT_BUMP  = new Pose2d(4.625594,2.51079,new Rotation2d(Math.toRadians(0)));
+
+    public static Pose2d BLUE_LEFT_BUMP  = new Pose2d(4.625594,5.5523892,new Rotation2d(Math.toRadians(0)));
+
+    public static Pose3d BLUE_HUB = new Pose3d(4.625594,4.034536, 1.8288, new Rotation3d(0, 0, 0));
+}
