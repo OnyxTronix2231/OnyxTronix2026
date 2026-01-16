@@ -76,12 +76,6 @@ public class ScoringManager {
         return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), HUB_LENGTH, HUB_LENGTH, center);
     }
 
-    public Pose2d canDeliver(){
-        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
-        Pose2d botPose = Localization.getInstance().getBotPose();
-
-    }
-
     public Pose2d getDeliveryTarget(){
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();

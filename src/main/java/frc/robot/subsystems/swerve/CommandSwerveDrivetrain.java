@@ -34,7 +34,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.data.ScoringManager;
 import frc.robot.lib.SqrtErrorProfiledPIDController;
 import frc.robot.subsystems.alliance.AllianceProvider;
-import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -126,10 +125,10 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
 
     private SystemState handleStates() {
         return switch (wantedState) {
-            case IDLE-> SystemState.IDLE;
-            case AUTO-> SystemState.AUTO;
-            case TELEOP ->{
-                arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, ()->maxSpeed);
+            case IDLE -> SystemState.IDLE;
+            case AUTO -> SystemState.AUTO;
+            case TELEOP -> {
+                arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, () -> maxSpeed);
                 double turnFieldFrame = arr[2].getAsDouble() / maxAngularRate;
                 if (Math.abs(turnFieldFrame) > 0.05) {
                     mJoystickLastTouched = Timer.getFPGATimestamp();
@@ -146,7 +145,7 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
                     yield SystemState.KEEP_HEADING;
                 }
             }
-            case AUTO_PILOT-> SystemState.AUTO_PILOT;
+            case AUTO_PILOT -> SystemState.AUTO_PILOT;
             case AUTO_PILOT_CLIMBING -> SystemState.AUTO_PILOT_CLIMBING;
         };
     }
@@ -155,10 +154,11 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
     private void applyStates() {
         switch (currentSystemState) {
             case IDLE -> idle_state();
-            case AUTO -> {}
+            case AUTO -> {
+            }
             case TELEOP -> teleop();
             case KEEP_HEADING -> keepHeading();
-            case AUTO_PILOT-> autopilot(new Pose2d());
+            case AUTO_PILOT -> autopilot(new Pose2d());
             case AUTO_PILOT_CLIMBING -> autopilot(ScoringManager.getInstance().getClimbingTargetBasedOnCondition());
 
         }
@@ -196,10 +196,6 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
         mHeadingSetpoint = Optional.empty();
     }
 
-    private void driveToClimb(double ySpeed) {
-        setControl(chassisSpeedRequestRobotCentric(new ChassisSpeeds(0, ySpeed, 0)));
-        mHeadingSetpoint = Optional.empty();
-    }
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
 
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -343,7 +339,6 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
         return driveNoHeadingAutopilot.withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond)
                 .withRotationalRate(speeds.omegaRadiansPerSecond);
     }
-
 
 
     private ChassisSpeeds getChassisSpeedsFromFieldPoint(
