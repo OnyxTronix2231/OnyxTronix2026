@@ -6,11 +6,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.localization.Localization;
 
-import java.util.List;
-
 import static frc.robot.data.FieldConstants.*;
-import static frc.robot.data.FieldUtils.flipPose;
-import static frc.robot.data.FieldUtils.isInRect;
+import static frc.robot.data.FieldUtils.*;
 
 
 public class ScoringManager {
@@ -34,20 +31,20 @@ public class ScoringManager {
         this.ballShootingType = ballShootingType;
     }
 
-    public boolean isInHub(Translation2d pos) {
-        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
-        Pose2d center = alliance == DriverStation.Alliance.Blue ? BLUE_HUB.toPose2d() : flipPose(BLUE_HUB.toPose2d());
-        return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), 0, HUB_LENGTH, HUB_LENGTH, center);
-    }
-
     public Pose2d getNearestBump() {
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();
         if (alliance == DriverStation.Alliance.Blue) {
-            return botPose.nearest(List.of(BLUE_RIGHT_BUMP, BLUE_LEFT_BUMP));
+            return nearestPos(botPose, BLUE_RIGHT_BUMP, BLUE_LEFT_BUMP);
         } else {
-            return botPose.nearest(List.of(flipPose(BLUE_RIGHT_BUMP), flipPose(BLUE_LEFT_BUMP)));
+            return nearestPos(botPose,flipPose(BLUE_RIGHT_BUMP), flipPose(BLUE_LEFT_BUMP));
         }
+    }
+
+    public boolean isInHub(Translation2d pos) {
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        Pose2d center = alliance == DriverStation.Alliance.Blue ? BLUE_HUB.toPose2d() : flipPose(BLUE_HUB.toPose2d());
+        return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), HUB_LENGTH, HUB_LENGTH, center);
     }
 
     public boolean canDeliver(Pose2d deliveryPose) {

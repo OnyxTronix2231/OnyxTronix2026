@@ -51,7 +51,6 @@ public class Robot extends LoggedRobot {
         Localization.init();
         ScoringManager.init();
 
-        Logger.recordOutput("nearstBump",ScoringManager.getInstance().getNearestBump());
 
         //auto
 //            auto = new Autonomous();
@@ -74,6 +73,10 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        Logger.recordOutput("nearstBump",ScoringManager.getInstance().getNearestBump());
+        Logger.recordOutput("isInHub",ScoringManager.getInstance().isInHub(Localization.getInstance().getBotPose().getTranslation()));
+        Logger.recordOutput("",ScoringManager.getInstance().canDeliver(Localization.getInstance().getBotPose().getTranslation()));
+
     }
 
     /**
