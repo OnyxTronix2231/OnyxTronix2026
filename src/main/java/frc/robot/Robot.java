@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.data.ScoringManager;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -16,6 +17,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
 import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
+
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -43,11 +45,13 @@ public class Robot extends LoggedRobot {
 //
 //            }
 //        }
+        CommandSwerveDrivetrain.init(createDrivetrain());
+        Localization.init();
+        ScoringManager.init();
 
-            CommandSwerveDrivetrain.init(createDrivetrain());
-            Localization.init();
+        Logger.recordOutput("nearstBump",ScoringManager.getInstance().getNearestBump());
 
-            //auto
+        //auto
 //            auto = new Autonomous();
 
     }
