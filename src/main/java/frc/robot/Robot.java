@@ -69,7 +69,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         updateVisualizations();
-        Logger.recordOutput("Apriltag map", VisionConstants.APRIL_TAG_MAP.values().toArray(new Pose3d[VisionConstants.APRIL_TAG_MAP.size()]));
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
