@@ -138,7 +138,7 @@ public class VisionConstants {
         // 0.1812 x
         LIMELIGHT_LEFT("limelight-l", 0.1842, 0.172, 0.03, 26, 12.5, 82, 56.2),
         LIMELIGHT_RIGHT("limelight-r", 0.1842, 0.172, 0.0808, 26, -12.5, 82, 56.2),
-        LIMELIGHT_OBJECT_DETECTION("limelight-o", 0.86, 0.245, 0.26, 40, 18, 62.5, 49);
+        LIMELIGHT_TURRET("limelight-o", 0.86, 0.245, 0.26, 40, 18, 62.5, 49);
 
         public final String NAME;
 

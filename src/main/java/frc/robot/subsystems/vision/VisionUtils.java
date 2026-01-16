@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.turret.Turret;
 
 public class VisionUtils {
     public static double interpolate(double distance, double minDev, double maxDev, double minDist, double maxDist) {
@@ -72,9 +73,5 @@ public class VisionUtils {
         Translation3d rotatedVector = turretToLimelightVector.rotateBy(turretAngle);
         Rotation3d angleToLimelight = turretAngle.rotateBy(limeLightToTurretOffset);
         return new Pose3d(robotToTurretVector.plus(rotatedVector), angleToLimelight);
-    }
-
-    public static double rotateTurretToApriltag(double tx){
-        return new PIDController(10, 0, 0).calculate(tx);
     }
 }
