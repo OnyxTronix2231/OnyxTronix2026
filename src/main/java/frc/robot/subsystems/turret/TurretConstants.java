@@ -20,6 +20,10 @@ public class TurretConstants {
     public static final double TURRET_SUPPLY_LOWER_LIMIT = 40;
     public static final double TURRET_TIME_LOWER_LIMIT = 1;
 
+    public static final double APRILTAG_KP = 0;
+    public static final double APRILTAG_KI = 0;
+    public static final double APRILTAG_KD = 0;
+
     public static final double TURRET_FORWARD_SOFT_LIMIT_THRESHOLD = 360;
     public static final double TURRET_REVERSE_SOFT_LIMIT_THRESHOLD = -360;
 
