@@ -25,4 +25,19 @@ public class FieldUtils {
             return false;
         return true;
     }
+
+    public static boolean isInRect(Pose2d pose, double paddingMeters, double x, double y, Pose2d center) {
+        if (pose.getX() <= center.getX()-x/2 + paddingMeters)
+            return false;
+
+        if (pose.getY() <= center.getY()-y/2 + paddingMeters)
+            return false;
+
+        if (pose.getX() > center.getX()+x/2 + paddingMeters)
+            return false;
+
+        if (pose.getY() > center.getY()+y/2 + paddingMeters)
+            return false;
+        return true;
+    }
 }

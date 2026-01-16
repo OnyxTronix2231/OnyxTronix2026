@@ -1,6 +1,8 @@
 package frc.robot.data;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.localization.Localization;
 
@@ -8,11 +10,12 @@ import java.util.List;
 
 import static frc.robot.data.FieldConstants.*;
 import static frc.robot.data.FieldUtils.flipPose;
+import static frc.robot.data.FieldUtils.isInRect;
 
 
 public class ScoringManager {
 
-    public enum BallShootingType{
+    public enum BallShootingType {
         SCORE,
         DELIVERY
     }
@@ -31,6 +34,12 @@ public class ScoringManager {
         this.ballShootingType = ballShootingType;
     }
 
+    public boolean isInHub(Translation2d pos) {
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        Pose2d center = alliance == DriverStation.Alliance.Blue ? BLUE_HUB.toPose2d() : flipPose(BLUE_HUB.toPose2d());
+        return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), 0, HUB_LENGTH, HUB_LENGTH, center);
+    }
+
     public Pose2d getNearestBump() {
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();
@@ -39,6 +48,23 @@ public class ScoringManager {
         } else {
             return botPose.nearest(List.of(flipPose(BLUE_RIGHT_BUMP), flipPose(BLUE_LEFT_BUMP)));
         }
+    }
+
+    public boolean canDeliver(Pose2d deliveryPose) {
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        Pose2d botPose = Localization.getInstance().getBotPose();
+        Pose2d hubPose = BLUE_HUB.toPose2d();
+        if (alliance == DriverStation.Alliance.Red) {
+            hubPose = flipPose(BLUE_HUB.toPose2d());
+        }
+
+        Translation2d vector = new Translation2d(deliveryPose.getX() - botPose.getX(), deliveryPose.getY() - botPose.getY());
+        Translation2d hub_vector = new Translation2d(hubPose.getX() - botPose.getX(), hubPose.getY() - botPose.getY());
+
+        double length = hub_vector.getNorm();
+        vector = new Translation2d(vector.getX() * (length / vector.getNorm()), vector.getY() * (length / vector.getNorm()));
+        return !isInHub(vector.minus(botPose.getTranslation()).times(-1));
+
     }
 
     private static ScoringManager instance;
