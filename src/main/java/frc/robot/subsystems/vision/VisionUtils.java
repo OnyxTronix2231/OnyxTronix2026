@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.*;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -71,5 +72,9 @@ public class VisionUtils {
         Translation3d rotatedVector = turretToLimelightVector.rotateBy(turretAngle);
         Rotation3d angleToLimelight = turretAngle.rotateBy(limeLightToTurretOffset);
         return new Pose3d(robotToTurretVector.plus(rotatedVector), angleToLimelight);
+    }
+
+    public static double rotateTurretToApriltag(double tx){
+        return new PIDController(10, 0, 0).calculate(tx);
     }
 }

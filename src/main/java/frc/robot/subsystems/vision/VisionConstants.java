@@ -111,12 +111,10 @@ public class VisionConstants {
             put(10, new Pose3d(new Translation3d(12.5471, 4.0343, 1.1240),  new Rotation3d(0, 0, 0)));
             put(11, new Pose3d(new Translation3d(12.2740, 4.6466, 1.1240),  new Rotation3d(0, 0, 90)));
             put(12, new Pose3d(new Translation3d(11.9530, 7.4247, 0.8890),  new Rotation3d(0, 0, 0)));
-
-            put(13, new Pose3d(new Translation3d(16.5235, 7.4554, 0.5525), new Rotation3d(0, 0, 180)));
+            put(13, new Pose3d(new Translation3d(16.5235, 7.4554, 0.5525),  new Rotation3d(0, 0, 180)));
             put(14, new Pose3d(new Translation3d(16.5235, 6.9701, 0.5525),  new Rotation3d(0, 0, 180)));
             put(15, new Pose3d(new Translation3d(16.5329, 4.3236, 0.5525),  new Rotation3d(0, 0, 180)));
             put(16, new Pose3d(new Translation3d(16.5329, 3.8903, 0.5525),  new Rotation3d(0, 0, 180)));
-
             put(17, new Pose3d(new Translation3d(4.6614, 0.6444, 0.8890),   new Rotation3d(0, 0, 0)));
             put(18, new Pose3d(new Translation3d(4.6256, 3.4293, 1.1240),  new Rotation3d(0, 0, 270)));
             put(19, new Pose3d(new Translation3d(5.2392, 3.6755, 1.1240),  new Rotation3d(0, 0, 0)));
@@ -129,12 +127,10 @@ public class VisionConstants {
             put(26, new Pose3d(new Translation3d(4.0213, 4.0343, 1.1240),  new Rotation3d(0, 0, 180)));
             put(27, new Pose3d(new Translation3d(4.2824, 3.4293, 1.1240),  new Rotation3d(0, 0, 270)));
             put(28, new Pose3d(new Translation3d(4.5883, 0.6444, 0.8890),  new Rotation3d(0, 0, 180)));
-
             put(29, new Pose3d(new Translation3d(0.0076, 0.6711, 0.5525),  new Rotation3d(0, 0, 0)));
             put(30, new Pose3d(new Translation3d(0.0076, 1.0978, 0.5525),  new Rotation3d(0, 0, 0)));
             put(31, new Pose3d(new Translation3d(0.0081, 3.7490, 0.5525),  new Rotation3d(0, 0, 0)));
             put(32, new Pose3d(new Translation3d(0.0081, 4.1835, 0.5525),  new Rotation3d(0, 0, 0)));
-
         }
     };
 
