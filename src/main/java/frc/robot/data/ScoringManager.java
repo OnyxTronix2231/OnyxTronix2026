@@ -2,8 +2,10 @@ package frc.robot.data;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.localization.Localization;
 
 import static frc.robot.data.FieldConstants.*;
@@ -12,23 +14,28 @@ import static frc.robot.data.FieldUtils.*;
 
 public class ScoringManager {
 
-    public enum BallShootingType {
-        SCORE,
-        DELIVERY
-    }
-
-    private BallShootingType ballShootingType;
+    private ScoringData.BallShootingType ballShootingType;
+    private ScoringData.ClimbingSide climbingSide;
 
     public ScoringManager() {
-        ballShootingType = BallShootingType.SCORE;
+        ballShootingType = ScoringData.BallShootingType.SCORE;
+        climbingSide = ScoringData.ClimbingSide.RIGHT;
     }
 
-    public BallShootingType getBallShootingType() {
+    public ScoringData.BallShootingType getBallShootingType() {
         return ballShootingType;
     }
 
-    public void setBallShootingType(BallShootingType ballShootingType) {
+    public void setBallShootingType(ScoringData.BallShootingType ballShootingType) {
         this.ballShootingType = ballShootingType;
+    }
+
+    public ScoringData.ClimbingSide getClimbingSide() {
+        return climbingSide;
+    }
+
+    public void setClimbingSide(ScoringData.ClimbingSide climbingSide) {
+        this.climbingSide = climbingSide;
     }
 
     public Pose2d getNearestBump() {
@@ -69,6 +76,12 @@ public class ScoringManager {
         return isInRect(new Pose2d(pos, Rotation2d.fromDegrees(0)), HUB_LENGTH, HUB_LENGTH, center);
     }
 
+    public Pose2d canDeliver(){
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        Pose2d botPose = Localization.getInstance().getBotPose();
+
+    }
+
     public Pose2d getDeliveryTarget(){
         DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
         Pose2d botPose = Localization.getInstance().getBotPose();
@@ -84,6 +97,35 @@ public class ScoringManager {
             }
             return flipPose(BLUE_LEFT_DELIVERY);
         }
+    }
+
+    public Pose2d getClimbingTarget(){
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+        if (alliance == DriverStation.Alliance.Blue) {
+            if (climbingSide == ScoringData.ClimbingSide.RIGHT)
+                return BLUE_RIGHT_TOWER;
+            return BLUE_LEFT_TOWER;
+        }
+        else{
+            if (climbingSide == ScoringData.ClimbingSide.RIGHT)
+                return flipPose(BLUE_RIGHT_TOWER);
+            return flipPose(BLUE_LEFT_TOWER);
+        }
+    }
+
+    private Pose2d getPoseBasedOnCondition(boolean condition, Pose2d pose, double distanceX, double distanceY) {
+        if (condition)
+            return pose;
+        else
+            return pose.transformBy(new Transform2d(-distanceX, distanceY, new Rotation2d(0)));
+    }
+
+    public static boolean climbingCondition = false;
+
+    public Pose2d getClimbingTargetBasedOnCondition() {
+        double distanceY = climbingSide == ScoringData.ClimbingSide.RIGHT ? -CLIMBING_DISTANCE : CLIMBING_DISTANCE;
+        return getPoseBasedOnCondition(climbingCondition,
+                getClimbingTarget(), 0, distanceY);
     }
 
     private static ScoringManager instance;

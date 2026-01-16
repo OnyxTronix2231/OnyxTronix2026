@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.data.ScoringManager;
 import frc.robot.lib.SqrtErrorProfiledPIDController;
 import frc.robot.subsystems.alliance.AllianceProvider;
 import frc.robot.subsystems.localization.Localization;
@@ -44,6 +45,7 @@ import java.util.function.Supplier;
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.DriverOi.controller;
 import static frc.robot.subsystems.localization.TargetVector.getRelativeOffsetFromFieldPoint;
+import static frc.robot.subsystems.swerve.AutopilotConstants.*;
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.kSpeedAt12Volts;
 //import static frc.robot.Robot.hasUpdatedRotation;
 
@@ -81,7 +83,8 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
         IDLE,
         AUTO,
         TELEOP,
-        AUTO_PILOT
+        AUTO_PILOT,
+        AUTO_PILOT_CLIMBING
     }
 
     private enum SystemState {
@@ -89,15 +92,116 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
         AUTO,
         TELEOP,
         KEEP_HEADING,
-        AUTO_PILOT
+        AUTO_PILOT,
+        AUTO_PILOT_CLIMBING
     }
 
     private WantedState wantedState = WantedState.TELEOP;
-
     private SystemState currentSystemState = SystemState.TELEOP;
     private final SystemState previousSystemState = SystemState.TELEOP;
 
+    /**
+     * Constructs a CTRE SwerveDrivetrain using the specified constants.
+     * <p>c
+     * This constructs the underlying hardware devices, so user should not construct
+     * the devices themselves. If they need the devices, they can access them
+     * through getters in the classes.
+     *
+     * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
+     * @param modules             Constants for each specific module
+     */
+    public CommandSwerveDrivetrain(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... modules) {
+        super(drivetrainConstants, modules);
+        configureAutoBuilder();
+        if (Utils.isSimulation()) {
+            startSimThread();
+        }
+        CommandScheduler.getInstance().registerSubsystem(this);
+        driveWithHeading.HeadingController.setPID(3, 0, 0);
+        driveWithHeading.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+
+    }
+
+    DoubleSupplier[] arr;
+
+    private SystemState handleStates() {
+        return switch (wantedState) {
+            case IDLE-> SystemState.IDLE;
+            case AUTO-> SystemState.AUTO;
+            case TELEOP ->{
+                arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, ()->maxSpeed);
+                double turnFieldFrame = arr[2].getAsDouble() / maxAngularRate;
+                if (Math.abs(turnFieldFrame) > 0.05) {
+                    mJoystickLastTouched = Timer.getFPGATimestamp();
+                }
+                if (Math.abs(turnFieldFrame) > 0.05
+                        || (MathUtil.isNear(mJoystickLastTouched, Timer.getFPGATimestamp(), 0.25)
+                        && Math.abs(CommandSwerveDrivetrain.getInstance().getState().Speeds.omegaRadiansPerSecond) > Math
+                        .toRadians(10)))
+                    yield SystemState.TELEOP;
+                else {
+                    if (mHeadingSetpoint.isEmpty()) {
+                        mHeadingSetpoint = Optional.of(CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+                    }
+                    yield SystemState.KEEP_HEADING;
+                }
+            }
+            case AUTO_PILOT-> SystemState.AUTO_PILOT;
+            case AUTO_PILOT_CLIMBING -> SystemState.AUTO_PILOT_CLIMBING;
+        };
+    }
+
+
+    private void applyStates() {
+        switch (currentSystemState) {
+            case IDLE -> idle_state();
+            case AUTO -> {}
+            case TELEOP -> teleop();
+            case KEEP_HEADING -> keepHeading();
+            case AUTO_PILOT-> autopilot(new Pose2d());
+            case AUTO_PILOT_CLIMBING -> autopilot(ScoringManager.getInstance().getClimbingTargetBasedOnCondition());
+
+        }
+    }
+
+    private void idle_state() {
+        setControl(idleSwerve);
+    }
+
+    private void teleop() {
+        setControl(driveNoHeading.withVelocityX(arr[0].getAsDouble()).withVelocityY(arr[1].getAsDouble())
+                .withRotationalRate(arr[2].getAsDouble()));
+        mHeadingSetpoint = Optional.empty();
+    }
+
+    private void keepHeading() {
+        setControl(driveWithHeading.withVelocityX(arr[0].getAsDouble()).withVelocityY(arr[1].getAsDouble())
+                .withTargetDirection(mHeadingSetpoint.get()));
+    }
+
+    private void autopilot(Pose2d fieldPosition) {
+        setControl(chassisSpeedRequestAutopilot(getChassisSpeedsFromFieldPoint(
+                fieldPosition,
+                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_X,
+                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_Y,
+                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_ROT,
+                RELATIVE_AUTOPILOT_X_CONTROLLER,
+                RELATIVE_AUTOPILOT_Y_CONTROLLER,
+                RELATIVE_AUTOPILOT_ROTATIONAL_CONTROLLER)));
+        mHeadingSetpoint = Optional.empty();
+    }
+
+    private void drive(double xSpeed) {
+        setControl(chassisSpeedRequestRobotCentric(new ChassisSpeeds(xSpeed, 0, 0)));
+        mHeadingSetpoint = Optional.empty();
+    }
+
+    private void driveToClimb(double ySpeed) {
+        setControl(chassisSpeedRequestRobotCentric(new ChassisSpeeds(0, ySpeed, 0)));
+        mHeadingSetpoint = Optional.empty();
+    }
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
+
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
             new SysIdRoutine.Config(
                     null,        // Use default ramp rate (1 V/s)
@@ -113,8 +217,8 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
             )
     );
 
-
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
+
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
             new SysIdRoutine.Config(
                     null,        // Use default ramp rate (1 V/s)
@@ -195,12 +299,12 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
         }
     }
 
-
     /*
      * SysId routine for characterizing rotation.
      * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
      * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
      */
+
     private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
             new SysIdRoutine.Config(
                     /* This is in radians per second², but SysId only supports "volts per second" */
@@ -226,112 +330,9 @@ public class CommandSwerveDrivetrain extends OffSeasonTunerConstants.TunerSwerve
     public ChassisSpeeds wantedChassisSpeed() {
         return getKinematics().toChassisSpeeds(getState().ModuleTargets);
     }
-
     /* The SysId routine to test */
+
     private final SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
-
-    /**
-     * Constructs a CTRE SwerveDrivetrain using the specified constants.
-     * <p>c
-     * This constructs the underlying hardware devices, so user should not construct
-     * the devices themselves. If they need the devices, they can access them
-     * through getters in the classes.
-     *
-     * @param drivetrainConstants Drivetrain-wide constants for the swerve drive
-     * @param modules             Constants for each specific module
-     */
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants... modules) {
-        super(drivetrainConstants, modules);
-        configureAutoBuilder();
-        if (Utils.isSimulation()) {
-            startSimThread();
-        }
-        CommandScheduler.getInstance().registerSubsystem(this);
-        driveWithHeading.HeadingController.setPID(3, 0, 0);
-        driveWithHeading.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-
-    }
-
-    DoubleSupplier[] arr;
-
-    private SystemState handleStates() {
-        switch (wantedState) {
-            case IDLE:
-                return SystemState.IDLE;
-            case AUTO:
-                return SystemState.AUTO;
-            case TELEOP: {
-                arr = limitVelocity(controller::getLeftY, controller::getLeftX, controller::getRightX, ()->maxSpeed);
-                double turnFieldFrame = arr[2].getAsDouble() / maxAngularRate;
-                if (Math.abs(turnFieldFrame) > 0.05) {
-                    mJoystickLastTouched = Timer.getFPGATimestamp();
-                }
-                if (Math.abs(turnFieldFrame) > 0.05
-                        || (MathUtil.isNear(mJoystickLastTouched, Timer.getFPGATimestamp(), 0.25)
-                        && Math.abs(CommandSwerveDrivetrain.getInstance().getState().Speeds.omegaRadiansPerSecond) > Math
-                        .toRadians(10)))
-                    return SystemState.TELEOP;
-                else {
-                    if (mHeadingSetpoint.isEmpty()) {
-                        mHeadingSetpoint = Optional.of(CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
-                    }
-                    return SystemState.KEEP_HEADING;
-                }
-            }
-            case AUTO_PILOT:
-                return SystemState.AUTO_PILOT;
-        }
-        return SystemState.IDLE;
-    }
-
-
-    private void applyStates() {
-        switch (currentSystemState) {
-            case IDLE -> idle_state();
-            case AUTO -> {}
-            case TELEOP -> teleop();
-            case KEEP_HEADING -> keepHeading();
-            case AUTO_PILOT-> autopilot(new Pose2d());
-
-        }
-    }
-
-    private void idle_state() {
-        setControl(idleSwerve);
-    }
-
-    private void teleop() {
-        setControl(driveNoHeading.withVelocityX(arr[0].getAsDouble()).withVelocityY(arr[1].getAsDouble())
-                .withRotationalRate(arr[2].getAsDouble()));
-        mHeadingSetpoint = Optional.empty();
-    }
-
-    private void keepHeading() {
-        setControl(driveWithHeading.withVelocityX(arr[0].getAsDouble()).withVelocityY(arr[1].getAsDouble())
-                .withTargetDirection(mHeadingSetpoint.get()));
-    }
-
-    private void autopilot(Pose2d fieldPosition) {
-//        setControl(chassisSpeedRequestAutopilot(getChassisSpeedsFromFieldPoint(
-//                fieldPosition,
-//                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_X,
-//                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_Y,
-//                () -> MAX_RELATIVE_AUTOPILOT_VELOCITY_ROT,
-//                RELATIVE_AUTOPILOT_X_CONTROLLER,
-//                RELATIVE_AUTOPILOT_Y_CONTROLLER,
-//                RELATIVE_AUTOPILOT_ROTATIONAL_CONTROLLER)));
-//        mHeadingSetpoint = Optional.empty();
-    }
-
-    private void drive(double xSpeed) {
-        setControl(chassisSpeedRequestRobotCentric(new ChassisSpeeds(xSpeed, 0, 0)));
-        mHeadingSetpoint = Optional.empty();
-    }
-
-    private void driveToClimb(double ySpeed) {
-        setControl(chassisSpeedRequestRobotCentric(new ChassisSpeeds(0, ySpeed, 0)));
-        mHeadingSetpoint = Optional.empty();
-    }
 
     private SwerveRequest chassisSpeedRequestRobotCentric(ChassisSpeeds speeds) {
         return driveNoHeadingRobotCentric.withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond)

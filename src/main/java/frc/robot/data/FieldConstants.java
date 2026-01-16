@@ -1,9 +1,6 @@
 package frc.robot.data;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.*;
 
 public class FieldConstants {
 
@@ -23,7 +20,8 @@ public class FieldConstants {
     public static Pose2d BLUE_RIGHT_TRENCH = new Pose2d(4.625594, 0.644652, new Rotation2d(Math.toRadians(0)));
     public static Pose2d BLUE_LEFT_TRENCH = new Pose2d(4.625594, 7.4185272, new Rotation2d(Math.toRadians(0)));
 
-    public static Pose2d BLUE_TOWER = new Pose2d(1.06172, 3.730244, new Rotation2d(Math.toRadians(0)));
+    public static Pose2d BLUE_RIGHT_TOWER = new Pose2d(1.06172, 3.730244-0.5969, new Rotation2d(Math.toRadians(0)));
+    public static Pose2d BLUE_LEFT_TOWER = new Pose2d(1.06172, 3.730244+0.5969, new Rotation2d(Math.toRadians(0)));
 
     public static Pose2d BLUE_DEPOT = new Pose2d(0.3937, 5.94995, new Rotation2d(0));
 
@@ -34,4 +32,11 @@ public class FieldConstants {
 
     public static Pose3d BLUE_HUB = new Pose3d(4.625594, 4.034536, 1.8288, new Rotation3d(0, 0, 0));
     public static double HUB_LENGTH = 1.1938;
+
+    public static Translation2d BLUE_HUB_TOP_RIGHT = new Translation2d(4.625594+HUB_LENGTH/2, 4.034536+HUB_LENGTH/2);
+    public static Translation2d BLUE_HUB_TOP_LEFT = new Translation2d(4.625594+HUB_LENGTH/2, 4.034536-HUB_LENGTH/2);
+    public static Translation2d BLUE_HUB_BOTTOM_RIGHT = new Translation2d(4.625594-HUB_LENGTH/2, 4.034536+HUB_LENGTH/2);
+    public static Translation2d BLUE_HUB_BOTTOM_LEFT = new Translation2d(4.625594-HUB_LENGTH/2, 4.034536-HUB_LENGTH/2);
+
+    public static double CLIMBING_DISTANCE = 0.5;
 }
