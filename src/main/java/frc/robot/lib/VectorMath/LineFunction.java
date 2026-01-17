@@ -1,6 +1,7 @@
-package frc.robot.subsystems.vision;
+package frc.robot.lib.VectorMath;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import org.littletonrobotics.junction.Logger;
 
 public class LineFunction {
     public Translation2d TCoefficient;
@@ -17,7 +18,7 @@ public class LineFunction {
         return TCoefficient;
     }
 
-    public double getxCoefficient() {
+    public double getXCoefficient() {
         return xCoefficient;
     }
 
@@ -30,12 +31,12 @@ public class LineFunction {
         this.oneCoefficient = oneCoefficient;
     }
 
+    public static void log(){
+        Logger.recordOutput("VectorTest", VectorMathUtils.findIntersectionPoint(new LineFunction(new Translation2d(2,-1), new Translation2d(0,3)), new LineFunction(new Translation2d(-1,2), new Translation2d(4,-1))));
+    }
+
     public Translation2d getNumCoefficient() {
         return vectorCoefficient;
     }
 
-    public Translation2d findIntersectionPoint(LineFunction lineFunction){
-        double x = lineFunction.getNumCoefficient().getX()-getNumCoefficient().getX();
-        LineFunction tFunction = new LineFunction(lineFunction.getTCoefficient().getX()/getTCoefficient().getX(), x/getTCoefficient().getX());
-    }
 }

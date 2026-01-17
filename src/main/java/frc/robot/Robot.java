@@ -4,16 +4,13 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.data.ScoringManager;
+import frc.robot.lib.VectorMath.LineFunction;
 import frc.robot.subsystems.localization.Localization;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIOSimulation;
 import frc.robot.subsystems.turret.TurretShuffleBoard;
@@ -23,7 +20,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import static frc.robot.data.FieldConstants.*;
 import static frc.robot.subsystems.swerve.generated.OffSeasonTunerConstants.createDrivetrain;
 import static frc.robot.visualization.VisualizedSubsystem.updateVisualizations;
 
@@ -42,6 +38,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         initializeLogger();
+        LineFunction.log();
 
         switch(currentRunningState) {
             case SIMULATION -> {
@@ -79,6 +76,8 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        Logger.recordOutput("rightCanDelivery", ScoringManager.getInstance().rightCanDelivery());
+        Logger.recordOutput("leftCanDelivery", ScoringManager.getInstance().leftCanDelivery());
     }
 
     /**
